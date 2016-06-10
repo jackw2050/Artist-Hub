@@ -1,0 +1,19 @@
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+body {
+	background-color: #003459;
+	color: white;
+}
+.collapsible-header {
+	background-color: #007EA7;
+}
+.collapsible-body {
+	background-color: #00171F;
+}
+#addInput {
+	background-color: #00A8E8;
+}
+#headerText {
+font-family: 'Lobster', cursive;
+font-size: 100px;
+color: #b90000;
+}
