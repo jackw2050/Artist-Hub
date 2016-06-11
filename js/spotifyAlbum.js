@@ -9,6 +9,7 @@ function album(item) {
         console.log(artistPopularity);
         //Change the HTML to the image from albumImages
         $('#middleColumn').html("<img id='imageStyle' src=" + albumImages + " class='responsive-img'>");
+        //$('middleColumn').prepend("Hotness rating: " + artistPopularity);
         //This feature will make it so that the popularity of the arist determines
         //the color of the glow around their album art. Red is HOT, yellow is in the middle, and blue is ice COLD.
         if(artistPopularity >= 1 && artistPopularity <= 20) {
@@ -25,6 +26,8 @@ function album(item) {
       });
   }
   $(document).on("click", "#addInput", function() {
+    $('#middleColumn').html(
+  "<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
     //This grabs the html value from userInputText and stores it in a variable.
     var whatIsTyped = $('#userInputText').val();
     //We pull the same variable defined above and run it as the "item" from the function album.
