@@ -12,4 +12,6 @@
 		$('#wikipediaObject').html('');
 		var whatIsTyped = $('#userInputText').val();
 		WD(whatIsTyped);
+		GetNews(whatIsTyped);
+		GetConcertInfo(whatIsTyped);
 	});
