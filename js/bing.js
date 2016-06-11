@@ -1,3 +1,12 @@
+
+var myFirebaseRef = new Firebase("https://artist-hub.firebaseio.com/");
+
+
+
+
+
+
+
 function GetNews(bandSelected) {
     var params = {
         // Request parameters
