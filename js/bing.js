@@ -1,11 +1,17 @@
 
-var myFirebaseRef = new Firebase("https://artist-hub.firebaseio.com/");
 
 
 
 
+var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/"),
+    usersRef = new Firebase(myFirebaseRef + 'users');
+
+usersRef.on('value', function (snapshot) {
+    console.log(snapshot.val());
 
 
+})
+var userKey = 
 
 function GetNews(bandSelected) {
     var params = {
@@ -32,12 +38,8 @@ function GetNews(bandSelected) {
         .done(function(data) {
             $(".newsStory").empty();
             for (let i = 0; i < 5; i++) { // check number of stories returned
-
-                //$(".newsStory").append("<img src='" + data.news.value[i].image.thumbnail.contentUrl + "'>");
                 $(".newsStory").append("<p>" + data.news.value[i].name);
-                //$(".card-action").append("<a href='" + data.webPages.value[i].url + "'>Full Story</a>");
                 $(".newsStory").append("<a class='newsLink' href='" + data.webPages.value[i].url + "'>" + "Full Story");
-
             }
             console.log(data);
             // alert("success");
@@ -45,18 +47,15 @@ function GetNews(bandSelected) {
         .fail(function() {
             alert("error");
         });
-
-
 }
 
 function GetConcertInfo(bandSelected) {
-
     new BIT.Widget({
         "artist": bandSelected,
         "div_id": "tour-dates",
         "force_narrow_layout": "true",
         "display_limit": "5",
-        "text_color": "#FFFFFF", 
+        "text_color": "#FFFFFF",
         "bg_color": "#003459",
         "width": "265px",
         "notify_me": "true"
@@ -64,17 +63,25 @@ function GetConcertInfo(bandSelected) {
 }
 
 function myfunction() {
-    var queryURL = "http://api.bandsintown.com/artists/" + jetTrimmed + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
+    var queryURL = "http://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
 
     $.ajax({
         url: queryURL,
         method: 'GET'
     }).done(function(response) {
         console.log(response);
-
     });
 
 }
 
 
-//url: "http://api.bandsintown.com/artists/selena gomez.json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist",
+function readFirebase() {
+    myFirebaseRef.on("child_added", function(childSnapshot, prevChildKey) {
+
+        console.log(childSnapshot.val());
+        //$("songLinks").append("<a href='https://youtu.be/ltMNupXjZwk'>吉田朱里 渡辺美優紀 上西恵 「ジッパー</a>);
+
+        //https://www.youtube.com/playlist?list=PL8A1ABD0F21899CD5
+
+    });
+}

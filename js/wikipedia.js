@@ -1,3 +1,5 @@
+	readFirebase();
+
 	function WD(item) {
 	    url = "http://en.wikipedia.org/w/api.php?action=query&prop=description&titles=" + item.toString() + "&prop=extracts&exintro&explaintext&format=json&redirects&callback=?";
 	    $.getJSON(url, function (json) {
@@ -14,4 +16,5 @@
 		WD(whatIsTyped);
 		GetNews(whatIsTyped);
 		GetConcertInfo(whatIsTyped);
+		
 	});
