@@ -10,8 +10,19 @@ myFirebaseRef.on("value", function(snapshot, prevChildKey) {
 });
 
 
-
-
+//var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
+function AuthorizeUser(){
+myFirebaseRef.authWithPassword({
+  email    : "bobtony@firebase.com",
+  password : "correcthorsebatterystaple"
+}, function(error, authData) {
+  if (error) {
+    console.log("Login Failed!", error);
+  } else {
+    console.log("Authenticated successfully with payload:", authData);
+  }
+});
+}
 
 
 function SetupUserAccount(){
