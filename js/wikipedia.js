@@ -6,7 +6,7 @@
 	        var item_id = Object.keys(json.query.pages)[0];
 	        userGiven = json.query.pages[item_id].extract;
 	        result = "<b></b> <t>" + item + "</t> <b> : </b>" + userGiven;
-	        $('#wikipediaObject').append("<div>"+result+"</div>");
+	        $('#wikipediaObject').append("<div class='wikipediaText'>"+result+"</div>");
 	    });
 	}
 	$(document).on("click", "#addInput", function() {
