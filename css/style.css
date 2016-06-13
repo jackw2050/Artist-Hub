@@ -3,6 +3,9 @@ body {
 	background-color: #003459;
 	color: white;
 }
+.sweet-alert {
+	color: black;
+}
 .collapsible-header {
 	background-color: #007EA7;
 }
@@ -20,4 +23,10 @@ color: #b90000;
 .newsLink{
 	text-align: center;
 	margin: auto;
+}
+.wikipediaText {
+	font-size: 9px;
+}
+.sweetAlertText {
+	color: black;
 }
