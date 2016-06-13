@@ -1,17 +1,37 @@
 
+var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/");
+
+// Retrieve new posts as they are added to our database
+myFirebaseRef.on("value", function(snapshot, prevChildKey) {
+  var newPost = snapshot.val();
+  console.log("Author: " + newPost.name);
+  console.log("Title: " + newPost.email);
+  console.log("Previous Post ID: " + prevChildKey);
+});
 
 
 
 
-var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/"),
-    usersRef = new Firebase(myFirebaseRef + 'users');
-
-usersRef.on('value', function (snapshot) {
-    console.log(snapshot.val());
 
 
-})
-var userKey = 
+function SetupUserAccount(){
+    myFirebaseRef.createUser({
+  email    : "bobtony@firebase.com",
+  password : "correcthorsebatterystaple"
+}, function(error, userData) {
+  if (error) {
+    console.log("Error creating user:", error);
+  } else {
+    console.log("Successfully created user account with uid:", userData.uid);
+  }
+});
+}
+
+
+
+
+
+
 
 function GetNews(bandSelected) {
     var params = {
