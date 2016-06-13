@@ -3,12 +3,21 @@ function album(item) {
       url = "https://api.spotify.com/v1/search?q=" + item.toString() + "&type=artist";
       $.getJSON(url, function (json) {
         console.log(json.artists);
+
+        var lengthOfArtists = json.artists.total;
+        console.log(lengthOfArtists + "This is the total amount of artists");
+        if(lengthOfArtists > 1) {
         //Grab the second item in the images array which is a smaller image
         var albumImages = json.artists.items[0].images[0].url;
         var artistPopularity = json.artists.items[0].popularity;
-        console.log(artistPopularity);
         //Change the HTML to the image from albumImages
         $('#middleColumn').html("<img id='imageStyle' src=" + albumImages + " class='responsive-img'>");
+        }
+        if(lengthOfArtists == 0) {
+          swal({   title: "Dangit!",   text: "We could not find an artists with that name!",   imageUrl: "images/sadface.png" });
+          $('#middleColumn').html("<img src=images/sadface.png class='responsive-img'><h3>You didn't enter a valid artist!</h3>");
+        }
+        console.log(artistPopularity);
         //$('middleColumn').prepend("Hotness rating: " + artistPopularity);
         //This feature will make it so that the popularity of the arist determines
         //the color of the glow around their album art. Red is HOT, yellow is in the middle, and blue is ice COLD.

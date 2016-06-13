@@ -1,7 +1,6 @@
 	function WD(item) {
 	    url = "http://en.wikipedia.org/w/api.php?action=query&prop=description&titles=" + item.toString() + "&prop=extracts&exintro&explaintext&format=json&redirects&callback=?";
 	    $.getJSON(url, function (json) {
-	    	console.log(json);
 	        var item_id = Object.keys(json.query.pages)[0];
 	        userGiven = json.query.pages[item_id].extract;
 	        result = "<b></b> <t>" + item + "</t> <b> : </b>" + userGiven;
