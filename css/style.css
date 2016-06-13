@@ -17,3 +17,7 @@ font-family: 'Lobster', cursive;
 font-size: 100px;
 color: #b90000;
 }
+.newsLink{
+	text-align: center;
+	margin: auto;
+}

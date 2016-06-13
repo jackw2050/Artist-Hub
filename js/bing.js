@@ -1,7 +1,22 @@
-$(function() {
+
+
+
+
+
+var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/"),
+    usersRef = new Firebase(myFirebaseRef + 'users');
+
+usersRef.on('value', function (snapshot) {
+    console.log(snapshot.val());
+
+
+})
+var userKey = 
+
+function GetNews(bandSelected) {
     var params = {
         // Request parameters
-        "q": "elvis presley",
+        "q": bandSelected,
         "count": "10",
         "offset": "0",
         "mkt": "en-us",
@@ -21,55 +36,52 @@ $(function() {
             data: "{body}",
         })
         .done(function(data) {
-
-            for (let i = 0; i < 1; i++) {
-
-                //$(".newsStory").append("<img src='" + data.news.value[i].image.thumbnail.contentUrl + "'>");
-                //$(".newsStory").append("<p>" + data.news.value[i].description);
-                $(".card-action").append("<a href='" + data.webPages.value[i].url + "'>Full Story</a>");
-                //$("#Story").append("<a href='" + data.webPages.value[i].url + "'>" + data.webPages.value[i].name );
-
+            $(".newsStory").empty();
+            for (let i = 0; i < 5; i++) { // check number of stories returned
+                $(".newsStory").append("<p>" + data.news.value[i].name);
+                $(".newsStory").append("<a class='newsLink' href='" + data.webPages.value[i].url + "'>" + "Full Story");
             }
-
-
             console.log(data);
             // alert("success");
         })
         .fail(function() {
             alert("error");
         });
+}
+
+function GetConcertInfo(bandSelected) {
+    new BIT.Widget({
+        "artist": bandSelected,
+        "div_id": "tour-dates",
+        "force_narrow_layout": "true",
+        "display_limit": "5",
+        "text_color": "#FFFFFF",
+        "bg_color": "#003459",
+        "width": "265px",
+        "notify_me": "true"
+    }).insert_events();
+}
+
+function myfunction() {
+    var queryURL = "http://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
+
+    $.ajax({
+        url: queryURL,
+        method: 'GET'
+    }).done(function(response) {
+        console.log(response);
+    });
+
+}
 
 
-});
+function readFirebase() {
+    myFirebaseRef.on("child_added", function(childSnapshot, prevChildKey) {
 
-$(function() {
+        console.log(childSnapshot.val());
+        //$("songLinks").append("<a href='https://youtu.be/ltMNupXjZwk'>吉田朱里 渡辺美優紀 上西恵 「ジッパー</a>);
 
+        //https://www.youtube.com/playlist?list=PL8A1ABD0F21899CD5
 
-            let dataArtist          = "The clash";
-            let dataTextColor       = "#FFFFFF";
-            let dataLinkColor       = "#FFFFFF";
-            let dataBgColor         = "#000000";
-            let dataSeparatorColor  = "#E9E9E9";
-            let dataWidth           = "100%";// can be % or px
-            let dataDisplayLimit    = "5";
-
-
-
-
- $(".newsStory").append("<a href='http://www.bandsintown.com' class='bit-widget-initializer' dataDisplayLimit='" + dataDisplayLimit + "' data-artist='" + dataArtist +"''>Bandsintown</a>");
-
-
-
-
-            });
-
-
-
-
-/*
-        <div class="col s4 m4 offset-m4 offset-s4 newsStory">
-         <!--<a href="http://www.bandsintown.com" class="bit-widget-initializer" data-artist="Selena Gomez">Bandsintown</a>-->
-
-        </div>
-*/
-
+    });
+}
