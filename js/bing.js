@@ -102,7 +102,7 @@ function GetConcertInfo(bandSelected) {
         "display_limit": "5",
         "text_color": "#616161",
         "bg_color": "#00171F",
-        "width": "409px",
+        "width": "400px",
         "notify_me": "true"
     }).insert_events();
 }
