@@ -108,7 +108,7 @@ function GetConcertInfo(bandSelected) {
 }
 
 function myfunction() {
-    var queryURL = "http://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
+    var queryURL = "https://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
 
     $.ajax({
         url: queryURL,
