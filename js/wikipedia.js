@@ -12,6 +12,7 @@ AuthorizeUser();
 	}
 	$(document).on("click", "#addInput", function() {
 		$('#wikipediaObject').html('');
+		$('.songLinks').empty();
 		var whatIsTyped = $('#userInputText').val();
 		WD(whatIsTyped);
 		GetNews(whatIsTyped);
