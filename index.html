@@ -17,6 +17,9 @@
     <link type="text/css" rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
     <script src="https://cdn.firebase.com/js/client/2.4.1/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.mcustomscrollbar/3.0.6/jquery.mCustomScrollbar.concat.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.mcustomscrollbar/3.0.6/jquery.mCustomScrollbar.min.css">
+    <link type="image/png" rel="icon" href="https://cdn.jsdelivr.net/jquery.mcustomscrollbar/3.0.6/mCSB_buttons.png">
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
     <script type="text/javascript" src="https://www.bandsintown.com/javascripts/bit_widget.js"></script>
     <script type="text/javascript" src="js/bit_widget.js"></script>
@@ -32,6 +35,7 @@
         <div class="row">
             <div class="col l8 offset-l2 center-align">
                 <h1 class="amber-text text-darken-3" id="headerText">Artist<span class="orange-text text-darken-4">HUB</span></h1>
+                <h5 class="amber-text text-darken-3">Every Artist. <span class="orange-text text-darken-4">Everything. </span><span class="amber-text text-darken-3">One </span> <span class="orange-text text-darken-4">Place.</span></h5>
                 <!-- <hr> -->
             </div>
         </div>
@@ -46,36 +50,28 @@
                 </div>
                 <div id="user-select"></div>
                 <div class="row">
-                    <div class="card blue-grey darken-1 z-depth-5">
+                    <div class="card blue-grey darken-1 z-depth-5 mCustomScrollbar" data-mcs-theme="dark">
                         <div class="card-image">
                             <!-- <img src="images/eminem.png"> -->
                         </div>
                         <div class="card-content white-text">
                             <span class="card-title">Artist Videos</span>
-                            <div class="video"></div>
-                            <!--       <p>Here we will have the audio player.</p>
-                            <iframe width="250" height="20" src="https://www.youtube.com/embed/ltMNupXjZwk" frameborder="0" control="1" allowfullscreen></iframe>
-                            -->
-                            <!-- <iframe id="ytplayer" type="text/html" width="220" height="50" src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=1" frameborder="0" allowfullscreen></iframe> -->
+                            <div class="video video-container"><h4 style="color:#000">Type in an artist name above and click 'Explore'</h4></div>
+
+                            <!-- Here we will have the video player.--> 
                         </div>
                         <div class="card-action songLinks grey-text text-darken-4">
-                            <!-- <a href="https://youtu.be/ltMNupXjZwk">吉田朱里 渡辺美優紀 上西恵</a>
-                            <a href="https://www.youtube.com/playlist?list=PLmo4pBukfRoN8SB5RKvfiY9CTl9pI_IFc">The Beatles</a> -->
                         </div>
                         <!-- song links will be here -->
                     </div>
                 </div>
             </div>
-            <div class="col m4 center-align">
-                <!--<img src="images/eminem.png">-->
-                <h3 class="amber-text text-darken-3">Every Artist<br><span class="orange-text text-darken-4">Everything</span><br><span class="amber-text text-darken-3">One</span> <span class="orange-text text-darken-4">Place</span></h3>
-                <div id="middleColumn"></div>
-            </div>
-            <div class="col m4" id="rightColumn">
+            
+            <div class="col m5" id="middleColumn">
                 <ul class="collapsible z-depth-5" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header"><i class="material-icons"></i>Short Biography</div>
-                        <div class="collapsible-body grey-text text-darken-1">
+                        <div class="collapsible-body grey-text text-darken-1 mCustomScrollbar" data-mcs-theme="dark" style="max-height:500px">
                             <p id="wikipediaObject">You haven't decided on an artist yet! Get it together!</p>
                         </div>
                     </li>
@@ -87,7 +83,7 @@
                     </li>
                     <li>
                         <div class="collapsible-header"><i class="material-icons"></i>Catch a Show</div>
-                        <div class="collapsible-body ">
+                        <div class="collapsible-body">
                             <div id="tour-dates"></div>
                             <!--   <a href="https://www.bandsintown.com" class="bit-widget-initializer" data-artist="broods" data-force-narrow-layout="true" data-display-limit="5">Bandsintown</a> 
                             <a href="javascript:;" id="show-widget"></a>
@@ -96,12 +92,18 @@
                     </li>
                 </ul>
             </div>
+            <div class="col m3">
+                <!--<img src="images/eminem.png">-->
+                
+                <div id="rightColumn"></div>
+            </div>
         </div>
     </div>
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript" src="js/wikipedia.js"></script>
     <script type="text/javascript" src="js/bing.js"></script>
+    
     <!-- <script type="text/javascript" src="js/music.js"></script> -->
 </body>
 

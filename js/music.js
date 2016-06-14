@@ -7,6 +7,7 @@
 	var allVideoArray = [];
 	var channelIdArray = [];
 	var playlistIdArray = [];
+	
 
 
 
@@ -34,7 +35,7 @@
 		        	var title = results[key].snippet.title;
 		        	var videoId = results[key].id.videoId;
 		        	videoArray.push(title);
-		        	var pOne = $('<p>').text(title).css({'font-size': '12px', 'margin-top':'10px','margin-bottom':'1px', 'cursor':'pointer'});
+		        	var pOne = $('<p>').html('<a style="text-transform:none">' + title + '</a>').css({'font-size': '12px', 'margin-top':'10px','margin-bottom':'1px', 'cursor':'pointer'});
 		        	pOne.attr('id', videoId);
 		        	pOne.on('click',onClick);
 		        	videoDiv.append(pOne);
@@ -87,46 +88,32 @@
 		        	//videoDiv.append(pThree);
 	        	};
 
-	        	$('.songLinks').append(videoDiv);
+	        	$('.songLinks').append(videoDiv).addClass('mCustomScrollbar').attr('data-mcs-theme', 'dark');
 
 	        	//console.log(videoArray);
 	        	allVideoArray.push(videoArray);
         	});
-        	//console.log("==============================");
-        	//console.log(allVideoArray);
-        	//console.log(channelIdArray);
-        	//console.log(playlistIdArray);
+        	
 
+        	var instructions = $('<h4>');
+        	instructions.css({
+        		color: '#000'
+        	});
+        	instructions.text('Click a video title below and enjoy!');
+        	$('.video').append(instructions);
+        	// var picture = $('<img>');
+        	// picture.attr('src', results[0].snippet.thumbnails.medium.url);
+        	// $('.video').append(picture);
         	return false;
 		});
 	};
 
-	// $('#addInput').on('click', function(){
-	// 	keyword = $("#userInputText").val().trim();
-	// 	searchSongs();
-	// 	//$("#userInputText").val('');
-		
-	// 	return false;
-	// });
 
 
 	function onClick(){
 		$('.video').empty();
 		vidId = $(this).attr('id');
-		//status = $(this).attr('status');
-		//$( ".video" ).each(function() {
-			//if ($('.video').attr('status') === 'open') {
-				//console.log("Please close video before opening another one");
-			//} else {
-		        // if (status === 'closed') {
-		            $('.video').html('<iframe width="395" height="300" src="https://www.youtube-nocookie.com/embed/' + vidId + '?rel=0&"&amp;controls=0&autoplay=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>');
-		            // $(this).attr('status', 'open');
-		        // } else {
-		        //     $(this).html("Play Video").css('font-weight', 'bold');
-		        //     $(this).attr('status', 'closed');
-		        // };
-			
-
+		$('.video').html('<iframe width="395" height="315" src="https://www.youtube-nocookie.com/embed/' + vidId + '?rel=0&"&amp;controls=0&autoplay=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>');
      };
      
 // });

@@ -11,16 +11,19 @@ function album(item) {
         var albumImages = json.artists.items[0].images[0].url;
         var artistPopularity = json.artists.items[0].popularity;
         //Change the HTML to the image from albumImages
-        $('#middleColumn').html("<img id='imageStyle' src=" + albumImages + " class='responsive-img'>");
+        $('#rightColumn').html("<img id='imageStyle' src=" + albumImages + " class='responsive-img'>");
         }
+        // var picture = $('<img>');
+        //   picture.attr('src', json.artists.items[1].images[1].url).css('width', '400');
+        //   $('.video').append(picture);
         if(lengthOfArtists == 0) {
           swal({   title: "Dangit!",   text: "We could not find an artists with that name!",   imageUrl: "images/sadface.png" });
-          $('#middleColumn').html("<img src=images/sadface.png class='responsive-img'><h3>You didn't enter a valid artist!</h3>");
+          $('#rightColumn').html("<img src=images/sadface.png class='responsive-img'><h3>You didn't enter a valid artist!</h3>");
         }
         console.log(artistPopularity);
-        //$('middleColumn').prepend("Hotness rating: " + artistPopularity);
+        //$('rightColumn').prepend("Hotness rating: " + artistPopularity);
         //This feature will make it so that the popularity of the arist determines
-        //the color of the glow around their album art. Red is HOT, yellow is in the middle, and blue is ice COLD.
+        //the color of the glow around their album art. Red is HOT, yellow is in the right, and blue is ice COLD.
         if(artistPopularity >= 1 && artistPopularity <= 20) {
           $('#imageStyle').css("box-shadow", "5px 5px 10px #72aee3");
         } else if(artistPopularity >= 21 && artistPopularity <= 39) {
@@ -35,7 +38,7 @@ function album(item) {
       });
   }
   $(document).on("click", "#addInput", function() {
-    $('#middleColumn').html(
+    $('#rightColumn').html(
   "<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
     //This grabs the html value from userInputText and stores it in a variable.
     var whatIsTyped = $('#userInputText').val();
