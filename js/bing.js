@@ -95,6 +95,7 @@ function GetNews(bandSelected) {
 }
 
 function GetConcertInfo(bandSelected) {
+    $('#tour-dates').empty();
     new BIT.Widget({
         "artist": bandSelected,
         "div_id": "tour-dates",
