@@ -119,6 +119,9 @@ function ResetPassword() {
 
 
 function GetNews(bandSelected) {
+    console.log(bandSelected);
+    bandSelected = bandSelected.replace(/ /g,"+");
+    bandSelected = bandSelected.replace(/-/g,"+");
     var params = {
         // Request parameters
         "q": bandSelected,
@@ -141,12 +144,23 @@ function GetNews(bandSelected) {
             data: "{body}",
         })
         .done(function(data) {
+            console.log(data);
             $(".newsStory").empty();
             for (let i = 0; i < 5; i++) { // check number of stories returned
-                $(".newsStory").append("<p>" + data.news.value[i].name);
-                $(".newsStory").append("<a class='newsLink' href='" + data.webPages.value[i].url + "'>" + "Full Story");
+                var news = $('<div>').attr('class', 'news');
+
+                var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold');
+                news.append(pOne);
+
+                var pTwo = $('<p>').html(data.news.value[i].description + ' <a class="newsLink" target="_blank" href="' + data.news.value[i].url + '">[full story]</a>');
+                news.append(pTwo);
+
+                var pThree = $('<hr>')
+                news.append(pThree);
+
+                $('.newsStory').append(news);
             }
-            console.log(data);
+            //console.log(data);
             // alert("success");
         })
         .fail(function() {
@@ -155,20 +169,22 @@ function GetNews(bandSelected) {
 }
 
 function GetConcertInfo(bandSelected) {
+    $('#tour-dates').empty();
     new BIT.Widget({
         "artist": bandSelected,
         "div_id": "tour-dates",
         "force_narrow_layout": "true",
         "display_limit": "5",
-        "text_color": "#FFFFFF",
-        "bg_color": "#003459",
-        "width": "265px",
+        "text_color": "#616161",
+        "bg_color": "#00171F",
+        "width": "300px",
         "notify_me": "true"
+
     }).insert_events();
 }
 
 function myfunction() {
-    var queryURL = "http://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
+    var queryURL = "https://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
 
     $.ajax({
         url: queryURL,

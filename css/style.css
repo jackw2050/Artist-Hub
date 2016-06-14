@@ -1,6 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Lobster);
+html {
+	font-family: 'Orbitron', sans-serif;
+}
 body {
-	background-color: #003459;
+	/*background-color: #90a4ae;*/
 	color: white;
 }
 .sweet-alert {
@@ -11,25 +14,70 @@ body {
 }
 .collapsible-body {
 	background-color: #00171F;
+	font-family: 'Arial', serif;
 }
 #addInput {
 	background-color: #00A8E8;
 }
 #headerText {
-font-family: 'Lobster', cursive;
-font-size: 100px;
-color: #b90000;
+font-family: 'Monoton', cursive;
+/*font-size: 100px;*/
+/*color: #b90000;*/
 }
 .newsLink{
 	text-align: center;
-	margin: auto;
+	/*margin: auto;*/
 }
 .wikipediaText {
-	font-size: 9px;
+	font-size: 14px;
 }
 .sweetAlertText {
 	color: black;
 }
+<<<<<<< HEAD
 .songLinks{
 	width:100%;
 }
+=======
+
+.newsStory p {
+	padding: 0;
+}
+
+.news {
+	padding: 3px 15px 0px 15px;
+}
+
+.card { 
+	max-height: 500px; 
+	overflow: auto; 
+}
+
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px;
+    height: 0;
+    overflow: hidden;
+}
+ 
+.video-container iframe,
+.video-container object,
+.video-container embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.c.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+	text-transform: none;
+}
+
+/*
+	font-family: 'Orbitron', sans-serif;
+	font-family: 'Rock Salt', cursive;
+	font-family: 'Monoton', cursive;
+*/
+>>>>>>> 775ee962fc9aa8280a850c592b58170022209967
