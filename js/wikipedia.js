@@ -7,7 +7,7 @@ AuthorizeUser();
 	        var item_id = Object.keys(json.query.pages)[0];
 	        userGiven = json.query.pages[item_id].extract;
 	        result = "<b></b> <t>" + item + "</t> <b> : </b>" + userGiven;
-	        $('#wikipediaObject').append("<div class='wikipediaText'>"+result+"</div>");
+	        $('#wikipediaObject').append("<div class='wikipediaText'>"+userGiven+"</div>");
 	    });
 	}
 	$(document).on("click", "#addInput", function() {
@@ -16,5 +16,7 @@ AuthorizeUser();
 		WD(whatIsTyped);
 		GetNews(whatIsTyped);
 		GetConcertInfo(whatIsTyped);
+		searchSongs(whatIsTyped);
+		$("#userInputText").val('');
 		
 	});

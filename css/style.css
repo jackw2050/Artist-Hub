@@ -1,6 +1,9 @@
 @import url(https://fonts.googleapis.com/css?family=Lobster);
+html {
+	font-family: 'Orbitron', sans-serif;
+}
 body {
-	background-color: #003459;
+	/*background-color: #90a4ae;*/
 	color: white;
 }
 .sweet-alert {
@@ -11,22 +14,41 @@ body {
 }
 .collapsible-body {
 	background-color: #00171F;
+	font-family: 'Arial', serif;
 }
 #addInput {
 	background-color: #00A8E8;
 }
 #headerText {
-font-family: 'Lobster', cursive;
+font-family: 'Monoton', cursive;
 font-size: 100px;
-color: #b90000;
+/*color: #b90000;*/
 }
 .newsLink{
 	text-align: center;
-	margin: auto;
+	/*margin: auto;*/
 }
 .wikipediaText {
-	font-size: 9px;
+	font-size: 12px;
 }
 .sweetAlertText {
 	color: black;
 }
+
+.newsStory p {
+	padding: 0;
+}
+
+.news {
+	padding: 3px 15px 0px 15px;
+}
+
+
+/*.placeholder {
+	glyphicon glyphicon-play-circle
+	glyphicon glyphicon-play
+	glyphicon glyphicon-stop
+	font-family: 'Orbitron', sans-serif;
+	font-family: 'Rock Salt', cursive;
+	font-family: 'Monoton', cursive;
+}*/
