@@ -10,24 +10,33 @@ function WD(item) {
         $('#wikipediaObject').append("<div class='wikipediaText'>" + userGiven + "</div>");
     });
 }
-// function checkValue(whatIsTyped)
-// {
-// 	re = ^.{2,}$;
-// 	if(whatIsTyped != '' && !whatIsTyped.match(re)) {
-// 		alert("You must enter a valid value");
-// 		$('#userInputText').focus();
-// 		return false;
-// 	}
-// 	return true;
-// };
+function checkValue(whatIsTyped)
+{
+    console.log("inside = " + whatIsTyped);
+	re = /^.{2,}$/;
+    console.log("re");
+	if(whatIsTyped != '' && !whatIsTyped.match(re)) {
+        console.log("this is below the regex");
+		sweetAlert("Nope...", "You need to enter an artist!", "error");
+        $('#rightColumn').html("");
+		whatIsTyped.focus();
+		return false;
+	}
+	return true;
+};
 $(document).on("click", "#addInput", function() {
     $('#wikipediaObject').html('');
     $('.video').empty();
     var whatIsTyped = $('#userInputText').val();
-    // checkValue(whatIsTyped);
+    checkValue(whatIsTyped);
     WD(whatIsTyped);
     GetNews(whatIsTyped);
     GetConcertInfo(whatIsTyped);
     searchSongs(whatIsTyped);
+    $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+    //This grabs the html value from userInputText and stores it in a variable.
+    var whatIsTyped = $('#userInputText').val();
+    //We pull the same variable defined above and run it as the "item" from the function album.
+    album(whatIsTyped);
     $("#userInputText").val('');
 });
