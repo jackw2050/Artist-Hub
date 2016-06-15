@@ -34,6 +34,11 @@ font-family: 'Monoton', cursive;
 .sweetAlertText {
 	color: black;
 }
+<<<<<<< HEAD
+.songLinks{
+	width:100%;
+}
+=======
 
 .newsStory p {
 	padding: 0;
@@ -81,3 +86,4 @@ footer {
 	font-family: 'Rock Salt', cursive;
 	font-family: 'Monoton', cursive;
 */
+>>>>>>> 775ee962fc9aa8280a850c592b58170022209967

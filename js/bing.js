@@ -1,44 +1,118 @@
-
 var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/");
+var firebaseUsersRoot = new Firebase("https://blistering-heat-4580.firebaseio.com/users");
+var firebaseSearchsRoot = new Firebase("https://blistering-heat-4580.firebaseio.com/searches");
 
-// Retrieve new posts as they are added to our database
-myFirebaseRef.on("value", function(snapshot, prevChildKey) {
-  var newPost = snapshot.val();
-  console.log("Author: " + newPost.name);
-  console.log("Title: " + newPost.email);
-  console.log("Previous Post ID: " + prevChildKey);
+//readFirebase() ;
+//SetupUserAccount();
+//AuthorizeUser();
+//AddNewUser();
+//AddNewSearch();
+
+firebaseUsersRoot.orderByValue().on("value", function(snapshot) {
+    snapshot.forEach(function(data) {
+        // console.log("User key " + data.key() + " user's name is " + data.val().name);
+        // console.log("User key " + data.key() + " user's user name is " + data.val().username);
+        // console.log("User key " + data.key() + " user's user name is " + data.val().searches);
+    });
+});
+
+firebaseSearchsRoot.orderByValue().on("value", function(snapshot) {
+    snapshot.forEach(function(data) {
+
+        console.log("Search name " + snapshot.val());
+
+    });
 });
 
 
-//var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
-function AuthorizeUser(){
-myFirebaseRef.authWithPassword({
-  email    : "bobtony@firebase.com",
-  password : "correcthorsebatterystaple"
-}, function(error, authData) {
-  if (error) {
-    console.log("Login Failed!", error);
-  } else {
-    console.log("Authenticated successfully with payload:", authData);
-  }
+
+function readFirebase() {}
+firebaseSearchsRoot.on("child_added", function(childSnapshot, prevChildKey) {
+
+    searchName = childSnapshot.val().search;
+    searchResult = childSnapshot.val().result;
+    console.log("Search: " + searchName);
+    console.log("Play list: " + searchResult);
+    //  console.log("<a href=https://www.youtube.com/playlist?list=" + searchResult + ">" + searchName + "</a>")
+    $(".card-action").append("<a href='https://www.youtube.com/playlist?list=" + searchResult + ">" + searchName + "</a>");
 });
+
+
+function AddNewUser() {
+
+    // Grabs user input
+    let Name = "John Doe"
+    let userName = "john-doe";
+    let email = "jdoe@yahoo.com";
+
+
+    var newUser = {
+        Name: Name,
+        userName: userName,
+        email: email
+    }
+
+    myFirebaseRef.push(newUser);
+    //  console.log(newUser);
+    alert("New user added");
+};
+
+function AddNewSearch() {
+
+    // Grabs user input
+    let search = "Black Sabbath";
+    let result = "PLAb2lmNIYk_4Th0u7UtSg75g29gqzi4K1";
+    var newSearch = {
+        search: search,
+        result: result
+    }
+
+    firebaseSearchsRoot.push(newSearch);
+    //   console.log(search);
+    alert("New search added");
+};
+
+
+
+
+function AuthorizeUser() {
+    myFirebaseRef.authWithPassword({
+        email: "bobtony@firebase.com",
+        password: "correcthorsebatterystaple"
+    }, function(error, authData) {
+        if (error) {
+            console.log("Login Failed!", error);//  call alert here
+        } else {
+            console.log("Authenticated successfully with payload:", authData);
+        }
+    });
 }
 
 
-function SetupUserAccount(){
+function SetupUserAccount() {
     myFirebaseRef.createUser({
-  email    : "bobtony@firebase.com",
-  password : "correcthorsebatterystaple"
-}, function(error, userData) {
-  if (error) {
-    console.log("Error creating user:", error);
-  } else {
-    console.log("Successfully created user account with uid:", userData.uid);
-  }
-});
+        email: "bobtony@firebase.com",
+        password: "correcthorsebatterystaple"
+    }, function(error, userData) {
+        if (error) {
+            console.log("Error creating user:", error);
+        } else {
+            console.log("Successfully created user account with uid:", userData.uid);
+        }
+    });
 }
 
-
+function ResetPassword() {
+    myFirebaseRef.resetPassword({
+        email: "bobtony@firebase.com"
+    }, function(error) {
+        if (error === null) {
+            console.log("Password reset email sent successfully");
+        } else {
+            console.log("Error sending password reset email:", error);
+        }
+    });
+}
 
 
 
@@ -119,16 +193,4 @@ function myfunction() {
         console.log(response);
     });
 
-}
-
-
-function readFirebase() {
-    myFirebaseRef.on("child_added", function(childSnapshot, prevChildKey) {
-
-        console.log(childSnapshot.val());
-        //$("songLinks").append("<a href='https://youtu.be/ltMNupXjZwk'>吉田朱里 渡辺美優紀 上西恵 「ジッパー</a>);
-
-        //https://www.youtube.com/playlist?list=PL8A1ABD0F21899CD5
-
-    });
 }
