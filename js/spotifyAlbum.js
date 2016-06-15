@@ -18,7 +18,7 @@ function album(item) {
         //   $('.video').append(picture);
         if(lengthOfArtists == 0) {
           swal({   title: "Dangit!",   text: "We could not find an artists with that name!",   imageUrl: "images/sadface.png" });
-          $('#rightColumn').html("<img src=images/sadface.png class='responsive-img'><h3>You didn't enter a valid artist!</h3>");
+          $('#rightColumn').html("");
         }
         console.log(artistPopularity);
         //$('rightColumn').prepend("Hotness rating: " + artistPopularity);

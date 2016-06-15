@@ -34,8 +34,8 @@
 	        	if(results[key].id.videoId){
 		        	var title = results[key].snippet.title;
 		        	var videoId = results[key].id.videoId;
-		        	videoArray.push(title);
-		        	var pOne = $('<p>').html('<a style="text-transform:none">' + title + '</a>').css({'font-size': '12px', 'margin-top':'10px','margin-bottom':'1px', 'cursor':'pointer'});
+		        	videoArray.push(title); 
+		        	var pOne = $('<p>').html('<i class="tiny material-icons">play_circle_outline</i><a style="text-transform:none">  ' + title + '</a>').css({'font-size': '12px', 'margin-top':'10px','margin-bottom':'1px', 'cursor':'pointer'});
 		        	pOne.attr('id', videoId);
 		        	pOne.on('click',onClick);
 		        	videoDiv.append(pOne);
@@ -95,7 +95,7 @@
         	});
         	
 
-        	var instructions = $('<h4>');
+        	var instructions = $('<h5>');
         	instructions.css({
         		color: '#000'
         	});

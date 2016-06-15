@@ -10,10 +10,25 @@ AuthorizeUser();
 	        $('#wikipediaObject').append("<div class='wikipediaText'>"+userGiven+"</div>");
 	    });
 	}
+
+	// function checkValue(whatIsTyped)
+	// {
+		
+	// 	re = ^.{2,}$;
+
+	// 	if(whatIsTyped != '' && !whatIsTyped.match(re)) {
+	// 		alert("You must enter a valid value");
+	// 		$('#userInputText').focus();
+	// 		return false;
+	// 	}
+
+	// 	return true;
+	// };
 	$(document).on("click", "#addInput", function() {
 		$('#wikipediaObject').html('');
 		$('.video').empty();
 		var whatIsTyped = $('#userInputText').val();
+		// checkValue(whatIsTyped);
 		WD(whatIsTyped);
 		GetNews(whatIsTyped);
 		GetConcertInfo(whatIsTyped);
