@@ -1,56 +1,59 @@
-@import url(https://fonts.googleapis.com/css?family=Lobster);
-html {
-	font-family: 'Orbitron', sans-serif;
+@import url(https://fonts.googleapis.com/css?family=Lobster); html {
+    font-family: 'Orbitron', sans-serif;
 }
+
 body {
-	/*background-color: #90a4ae;*/
-	color: white;
+    /*background-color: #90a4ae;*/
+    color: white;
 }
+
 .sweet-alert {
-	color: black;
+    color: black;
 }
+
 .collapsible-header {
-	background-color: #007EA7;
+    background-color: #007EA7;
 }
+
 .collapsible-body {
-	background-color: #00171F;
-	font-family: 'Arial', serif;
+    background-color: #00171F;
+    font-family: 'Arial', serif;
 }
+
 #addInput {
-	background-color: #00A8E8;
+    background-color: #00A8E8;
 }
+
 #headerText {
-font-family: 'Monoton', cursive;
-/*font-size: 100px;*/
-/*color: #b90000;*/
+    font-family: 'Monoton', cursive;
+    /*font-size: 100px;*/
+    /*color: #b90000;*/
 }
-.newsLink{
-	text-align: center;
-	/*margin: auto;*/
+
+.newsLink {
+    text-align: center;
+    /*margin: auto;*/
 }
+
 .wikipediaText {
-	font-size: 14px;
+    font-size: 14px;
 }
+
 .sweetAlertText {
-	color: black;
+    color: black;
 }
-<<<<<<< HEAD
-.songLinks{
-	width:100%;
-}
-=======
 
 .newsStory p {
-	padding: 0;
+    padding: 0;
 }
 
 .news {
-	padding: 3px 15px 0px 15px;
+    padding: 3px 15px 0px 15px;
 }
 
-.card { 
-	max-height: 400px; 
-	/*overflow: auto; */
+.card {
+    max-height: 400px;
+    /*overflow: auto; */
 }
 
 .video-container {
@@ -60,10 +63,8 @@ font-family: 'Monoton', cursive;
     height: 0;
     /*overflow: auto;*/
 }
- 
-.video-container iframe,
-.video-container object,
-.video-container embed {
+
+.video-container iframe, .video-container object, .video-container embed {
     position: absolute;
     top: 0;
     left: 0;
@@ -72,13 +73,13 @@ font-family: 'Monoton', cursive;
 }
 
 .card-action {
-	max-height:300px;
-	overflow:auto;
+    max-height: 300px;
+    overflow: auto;
 }
 
 footer {
-	margin-left:auto;
-	margin-right:auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /*
@@ -86,4 +87,3 @@ footer {
 	font-family: 'Rock Salt', cursive;
 	font-family: 'Monoton', cursive;
 */
->>>>>>> 775ee962fc9aa8280a850c592b58170022209967
