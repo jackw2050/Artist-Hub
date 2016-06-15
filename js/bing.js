@@ -71,7 +71,8 @@ function GetNews(bandSelected) {
         //console.log(data);
         // alert("success");
     }).fail(function() {
-        alert("error");
+        sweetAlert("Nope...", "You need to enter an artist!", "error");
+        $('#rightColumn').html("");
     });
 }
 function GetConcertInfo(bandSelected) {

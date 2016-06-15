@@ -4,11 +4,11 @@ if (typeof(Storage) !== "undefined") {
 	} else {
 		//If there is not a username then it will pop-up and ask for one. 
     setTimeout(function () {
-swal({   title: "Create an account!",   text: "Username:",   type: "input",   showCancelButton: true,   closeOnConfirm: false,   animation: "slide-from-top",   inputPlaceholder: "Your username" }
+swal({   title: "What is your name?",   text: "Your name:",   type: "input",   showCancelButton: true,   closeOnConfirm: false,   animation: "slide-from-top",   inputPlaceholder: "Your name" }
 	, function(inputValue)
 	{   if (inputValue === false) return false;      if (inputValue === "") {
 	     swal.showInputError("<div class='sweetAlertText'>You need to enter a username!</div>.");     return false   }
-	           swal("Nice!", "Your username is " + inputValue, "success"); 
+	           swal("Thanks!", "Welcome " + inputValue, "success"); 
 	           localStorage.setItem('username', inputValue);
 })
 }, 1000);	
