@@ -20,7 +20,7 @@ function checkSeachExists(name) {
     } else {
         searchExists = false;
         var newItem = {
-            search: name,
+            name: name,
             count: 1
         }
         tryUpdateSearch(name, newItem)
@@ -39,23 +39,48 @@ firebaseSearchsRoot.orderByValue().limitToLast(5).on("value", function(snapshot)
 
 
 
-
+var myArray = [];
 
 // Create snapshot of Firebase on load or new search    orderByValue()
 
-firebaseSearchsRoot.orderByValue().limitToLast(5).on("child_added", function(childSnapshot) {// change to order by count
+a2();
+
+function a2(){
+firebaseSearchsRoot.on("child_added", function(childSnapshot) {// change to order by count
     // console.log(childSnapshot.val())
     var searchName = childSnapshot.val().name;
     var searchCount = childSnapshot.val().count;
     //  console.log("searchCount " + searchCount);
-    console.log("search name " + searchName + "     searchCount " + searchCount);
+  //  console.log("search name " + searchName + "     searchCount " + searchCount);
+
+var a = {
+    name:searchName,
+    count:searchCount
+}
+
+myArray.push(a);
+var b = myArray.sort();
 
     mySearchArray.push(searchName);
     myCountArray.push(searchCount);
-    //   console.log("Array " + mySearchArray);
-    //   console.log("Array " + myCountArray);
+       console.log("Array " + mySearchArray);
+       console.log("Array " + b);
+      // SortMyArray();
+       console.log(myArray);
 });
-UpdateTop5();
+
+
+//var c = SortMyArray();
+///console.log(c);
+//UpdateTop5();
+}
+
+function SortMyArray(){
+myArray.sort(function(a, b) {
+    return parseFloat(a.count) > parseFloat(b.count);
+});
+
+}
 
 
 //  Update Firebase with new count
@@ -64,7 +89,7 @@ function UpdateSeachItem(search, counter) {
         name: search.toLowerCase(),
         count: counter
     };
-    tryUpdateSearch(search, searchData);
+    tryUpdateSearch(search.replace(/ /g, "_"), searchData);
 }
 //  Privides error function for Firebase data creation
 function tryUpdateSearch(userId, userData) {
@@ -86,7 +111,7 @@ function AddSearchItem(search, counter) {
         name: search.toLowerCase(),// convert name to all lower case to prevent duplicates.  Does not work for mispelling
         count: counter
     };
-    tryCreateSearch(search, searchDataNew);
+    tryCreateSearch(search.replace(/ /g, "_"), searchDataNew);
 }
 // Tries to set /users/<userId> to the specified data, but only
 // if there's no data there already.
@@ -113,6 +138,12 @@ function searchCreated(userId, success) {
 
 
 function UpdateTop5() {
+
+///////////////////////////////
+
+// bandSelected = bandSelected.replace(/ /g, "+");
+//////////////////////////////////////////
+    
 
     for (var x = 0; x < 5; x++) {
     $("#list-5").append("<li id='" + x + "'>" + mySearchArray[x] + "</li>");//  This does not work
@@ -150,6 +181,7 @@ function GetNews(bandSelected) {
             // check number of stories returned
 
             var news = data.news.value[i].name;
+            console.log("news " + news);
             var news = $('<div>').attr('class', 'news');
             var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold'); //i
             news.append(pOne);
