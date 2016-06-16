@@ -8,28 +8,42 @@ var myCountArray = [];
 var searchExists = false;
 
 
-
+// Search array to verify if search for band/ artist already exists.
+// If it exists increment counter and write to Firebase.
+// Else create new search in Firebase with count of 1
 function checkSeachExists(name) {
     if ($.inArray(name, mySearchArray) > -1) {
         var found = $.inArray(name, mySearchArray);
         searchExists = true;
         myCountArray[found]++;
-        UpdateSeachItem(mySearchArray[found], myCountArray[found]) 
-
+        UpdateSeachItem(mySearchArray[found], myCountArray[found])
     } else {
         searchExists = false;
-        tryUpdateSearch(name, 1)
+        var newItem = {
+            search: name,
+            count: 1
+        }
+        tryUpdateSearch(name, newItem)
     }
-
-    console.log("YYYYY   " + found);
-
 }
 
+/*  Currently this does not order child node only parent
+//var scoresRef = new Firebase("https://dinosaur-facts.firebaseio.com/scores");
+firebaseSearchsRoot.orderByValue().limitToLast(5).on("value", function(snapshot) {
+  snapshot.forEach(function(data) {
+    console.log(snapshot.val())
+    console.log("The " + data.key() + " dinosaur's score is " + data.count.val());
+  });
+});
+*/
 
 
 
 
-firebaseSearchsRoot.on("child_added", function(childSnapshot) {
+
+// Create snapshot of Firebase on load or new search    orderByValue()
+
+firebaseSearchsRoot.orderByValue().limitToLast(5).on("child_added", function(childSnapshot) {// change to order by count
     // console.log(childSnapshot.val())
     var searchName = childSnapshot.val().name;
     var searchCount = childSnapshot.val().count;
@@ -41,9 +55,10 @@ firebaseSearchsRoot.on("child_added", function(childSnapshot) {
     //   console.log("Array " + mySearchArray);
     //   console.log("Array " + myCountArray);
 });
+UpdateTop5();
 
 
-
+//  Update Firebase with new count
 function UpdateSeachItem(search, counter) {
     let searchData = {
         name: search.toLowerCase(),
@@ -51,22 +66,24 @@ function UpdateSeachItem(search, counter) {
     };
     tryUpdateSearch(search, searchData);
 }
-
+//  Privides error function for Firebase data creation
 function tryUpdateSearch(userId, userData) {
     firebaseSearchsRoot.child(userId).transaction(function(currentUserData) {
-            return userData;
+        return userData;
     }, function(error, committed) {
         searchCreated(userId, committed);
     });
 }
 
 
-
+//  Create new search item in Firebase with count of one.
+// This code checks for existance of data name.  Creates new data or returns error if it exists.
+// Since this function is only called if the search item is not in the array it should never throw an exception
 function AddSearchItem(search, counter) {
     //   var userId = prompt('Band?', 'Selena Gomez');
 
     let searchDataNew = {
-        name: search.toLowerCase(),
+        name: search.toLowerCase(),// convert name to all lower case to prevent duplicates.  Does not work for mispelling
         count: counter
     };
     tryCreateSearch(search, searchDataNew);
@@ -82,6 +99,8 @@ function tryCreateSearch(userId, userData) {
     });
 }
 
+
+//  Comment out alerts.  We should add some code here???
 function searchCreated(userId, success) {
     if (!success) {
         alert('user ' + userId + ' already exists!');
@@ -91,24 +110,16 @@ function searchCreated(userId, success) {
 }
 
 
-UpdateTop5();
+
 
 function UpdateTop5() {
 
-    for(var x = 0; x <5; x++){
-      //  $("#list-5").append("<li>" + mySearchArray[x] + "</li>");
-            var t5 = $('<li>' + mySearchArray[x]);
-         //   t5.append(mySearchArray[x]);
-         //   t5.append($('<li>'));
-            $("#list-5").append("Test");
-            console.log(t5);
+    for (var x = 0; x < 5; x++) {
+    $("#list-5").append("<li id='" + x + "'>" + mySearchArray[x] + "</li>");//  This does not work
     }
-    
+   // $('#top2').html(mySearchArray[2]);// just checking
 }
-
-
-
-
+//-----------------------------------------   News Section --------------------------------------------------
 function GetNews(bandSelected) {
     console.log(bandSelected);
     bandSelected = bandSelected.replace(/ /g, "+");
@@ -137,13 +148,13 @@ function GetNews(bandSelected) {
         $(".newsStory").empty();
         for (let i = 0; i < 5; i++) {
             // check number of stories returned
-            
+
             var news = data.news.value[i].name;
             var news = $('<div>').attr('class', 'news');
-            var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold');//i
+            var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold'); //i
             news.append(pOne);
             var pTwo = $('<p>').html(' <a class="newsLink" target="_blank" href="' + data.news.value[i].url + '">[full story]</a>');
-         // data.news.value[i].description + 
+            // data.news.value[i].description + 
             news.append(pTwo);
             var pThree = $('<hr>')
             news.append(pThree);
@@ -155,7 +166,7 @@ function GetNews(bandSelected) {
         alert("error");
     });
 }
-
+// ------------------------------------------- Concert Info Section --------------------------------------
 function GetConcertInfo(bandSelected) {
     $('#tour-dates').empty();
     new BIT.Widget({

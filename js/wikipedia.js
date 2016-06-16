@@ -30,4 +30,5 @@ $(document).on("click", "#addInput", function() {
     searchSongs(whatIsTyped);
     checkSeachExists(whatIsTyped);
     $("#userInputText").val('');
+    $('footer').append("<h1>Test</h1>");
 });
