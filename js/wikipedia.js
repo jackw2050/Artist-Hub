@@ -40,11 +40,11 @@ $(document).on("click", "#addInput", function() {
     GetConcertInfo(whatIsTyped);
     searchSongs(whatIsTyped);
 
- //   $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+   $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
     //This grabs the html value from userInputText and stores it in a variable.
- //   var whatIsTyped = $('#userInputText').val();
+    var whatIsTyped = $('#userInputText').val();
     //We pull the same variable defined above and run it as the "item" from the function album.
- //   album(whatIsTyped);
+   album(whatIsTyped);
 
     $("#userInputText").val('');
 
