@@ -93,8 +93,8 @@ function searchSongs(keyword) {
                 playlistIdArray.push(playlistId);
                 //var pThree = $('<p>').text("PlaylistId: " + playlistId).css({'margin':'1px','background-color':'yellow', 'width':'400px'});
                 //videoDiv.append(pThree);
-            }
-            ;$('.songLinks').append(videoDiv).addClass('mCustomScrollbar').attr('data-mcs-theme', 'dark');
+            };
+            $('.songLinks').append(videoDiv).addClass('mCustomScrollbar').attr('data-mcs-theme', 'dark');
             //console.log(videoArray);
             allVideoArray.push(videoArray);
         });
@@ -123,7 +123,7 @@ function onClick() {
 // Else create new search in Firebase with count of 1
 function checkSeachExists(name) {
     let tempName = name.toLowerCase();
-        tempName.replace(/-/g, "_");
+    tempName.replace(/-/g, "_");
 
     if ($.inArray(name, mySearchArray) > -1) {
         var found = $.inArray(name, mySearchArray);
@@ -145,11 +145,11 @@ function checkSeachExists(name) {
 
 
 
-function UpdateTop5() {// array of objects  name:  ,
-console.log(myArray);
+function UpdateTop5() { // array of objects  name:  ,
+    console.log(myArray);
     for (var x = 0; x < 5; x++) {
-        
-            //add code here
+
+        //add code here
     };
 };
 
@@ -209,7 +209,7 @@ function tryCreateSearch(userId, userData) {
 
 function searchCreated(userId, success) {
     if (!success) {
-       // alert('user ' + userId + ' already exists!');
+        // alert('user ' + userId + ' already exists!');
     } else {
         //alert('Successfully created ' + userId);
     };
@@ -227,16 +227,16 @@ function WD(item) {
 
 function checkValue(whatIsTyped) {
     console.log("inside = " + whatIsTyped);
-	var re = /^.{2,}$/;
+    var re = /^.{2,}$/;
     console.log("re");
-	if(whatIsTyped != '' && !whatIsTyped.match(re)) {
+    if (whatIsTyped != '' && !whatIsTyped.match(re)) {
         console.log("this is below the regex");
-		sweetAlert("Nope...", "You need to enter an artist!", "error");
+        sweetAlert("Nope...", "You need to enter an artist!", "error");
         $('#rightColumn').html("");
-		whatIsTyped.focus();
-		return false;
-	};
-	return true;
+        whatIsTyped.focus();
+        return false;
+    };
+    return true;
 };
 
 
@@ -363,9 +363,12 @@ function myfunction() {
 };
 //"child_added"
 function a2() {
+    let ii = 0;
+    firebaseSearchsRoot.on("child_added", function(childSnapshot) { // change to order by count
+        ii++;
 
-    firebaseSearchsRoot.on("value", function(childSnapshot) { // change to order by count
-       firebaseObjectArray.push(childSnapshot.val());
+
+        firebaseObjectArray.push(childSnapshot.val());
         var searchName = childSnapshot.val().name;
         var searchCount = childSnapshot.val().count;
         //  console.log("searchCount " + searchCount);
@@ -375,21 +378,26 @@ function a2() {
             name: searchName,
             count: searchCount
         };
-        
+
         myArray.push(a);
 
         mySearchArray.push(searchName);
         myCountArray.push(searchCount);
 
-        SortMyArray(myArray) ;
-
+        SortMyArray(myArray);
+        //console.log(myArray);
+        if (ii = Object.keys(firebaseObjectArray).length) {
+            console.log("Done");
+            console.log(myArray);
+            UpdateTop5();
+        }
 
         //console.log("inside")
-       // console.log(myArray);
-    }); 
+        // console.log(myArray);
+    });
     //console.log("outside")  
-   // console.log(myArray);
-      
+    // console.log(myArray);
+
 
 };
 
@@ -405,20 +413,20 @@ $(document).on("click", "#addInput", function() {
     GetConcertInfo(whatIsTyped);
     searchSongs(whatIsTyped);
 
-   $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+    $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
     //This grabs the html value from userInputText and stores it in a variable.
     var whatIsTyped = $('#userInputText').val();
     //We pull the same variable defined above and run it as the "item" from the function album.
-   album(whatIsTyped);
-    
+    album(whatIsTyped);
+
     $("#userInputText").val('');
 
 });
 
 
-$( window ).load(function() {
-   // a2();
-   // console.log( "window loaded" );
-	//console.log(myArray);
+$(window).load(function() {
+    // a2();
+    // console.log( "window loaded" );
+    //console.log(myArray);
 
 });
