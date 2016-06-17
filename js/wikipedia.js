@@ -1,8 +1,8 @@
+
 $(document).on("load", function() {
     a2();
     console.log(myArray);
 });
-
 
 
 function WD(item) {
@@ -23,6 +23,7 @@ function WD(item) {
 //      return false;
 //  }
 //  return true;
+
 // };
 $(document).on("click", "#addInput", function() {
     $('#wikipediaObject').html('');

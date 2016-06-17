@@ -1,3 +1,4 @@
+
 'use strict';
 
 var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/");
@@ -138,6 +139,7 @@ function searchCreated(userId, success) {
 
 
 //-----------------------------------------   News Section --------------------------------------------------
+
 function GetNews(bandSelected) {
     console.log(bandSelected);
     bandSelected = bandSelected.replace(/ /g, "+");
@@ -167,13 +169,14 @@ function GetNews(bandSelected) {
         for (let i = 0; i < 5; i++) {
             // check number of stories returned
 
+
             var news = data.news.value[i].name;
             console.log("news " + news);
             var news = $('<div>').attr('class', 'news');
             var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold'); //i
             news.append(pOne);
             var pTwo = $('<p>').html(' <a class="newsLink" target="_blank" href="' + data.news.value[i].url + '">[full story]</a>');
-            // data.news.value[i].description + 
+
             news.append(pTwo);
             var pThree = $('<hr>')
             news.append(pThree);
@@ -186,6 +189,7 @@ function GetNews(bandSelected) {
     });
 }
 // ------------------------------------------- Concert Info Section --------------------------------------
+
 function GetConcertInfo(bandSelected) {
     $('#tour-dates').empty();
     new BIT.Widget({
@@ -199,7 +203,6 @@ function GetConcertInfo(bandSelected) {
         "notify_me": "true"
     }).insert_events();
 }
-
 function myfunction() {
     var queryURL = "https://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
     $.ajax({
@@ -209,3 +212,4 @@ function myfunction() {
         console.log(response);
     });
 }
+7
