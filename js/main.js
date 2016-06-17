@@ -13,6 +13,7 @@ var mySearchArray = [];
 var myCountArray = [];
 var searchExists = false;
 var myArray = [];
+var firebaseObjectArray = [];
 
 
 function searchSongs(keyword) {
@@ -121,6 +122,9 @@ function onClick() {
 // If it exists increment counter and write to Firebase.
 // Else create new search in Firebase with count of 1
 function checkSeachExists(name) {
+    let tempName = name.toLowerCase();
+        tempName.replace(/-/g, "_");
+
     if ($.inArray(name, mySearchArray) > -1) {
         var found = $.inArray(name, mySearchArray);
         searchExists = true;
@@ -137,6 +141,10 @@ function checkSeachExists(name) {
 };
 
 
+
+
+
+
 function UpdateTop5() {// array of objects  name:  ,
 console.log(myArray);
     for (var x = 0; x < 5; x++) {
@@ -151,6 +159,9 @@ function SortMyArray() {
         return parseFloat(a.count) < parseFloat(b.count);
     });
 };
+
+
+
 
 
 //  Update Firebase with new count
@@ -196,12 +207,11 @@ function tryCreateSearch(userId, userData) {
 };
 
 
-//  Comment out alerts.  We should add some code here???
 function searchCreated(userId, success) {
     if (!success) {
        // alert('user ' + userId + ' already exists!');
     } else {
-       // alert('Successfully created ' + userId);
+        //alert('Successfully created ' + userId);
     };
 };
 
@@ -351,10 +361,11 @@ function myfunction() {
         console.log(response);
     });
 };
-
-
+//"child_added"
 function a2() {
-    firebaseSearchsRoot.on("child_added", function(childSnapshot) { // change to order by count
+
+    firebaseSearchsRoot.on("value", function(childSnapshot) { // change to order by count
+       firebaseObjectArray.push(childSnapshot.val());
         var searchName = childSnapshot.val().name;
         var searchCount = childSnapshot.val().count;
         //  console.log("searchCount " + searchCount);
@@ -364,20 +375,22 @@ function a2() {
             name: searchName,
             count: searchCount
         };
-
+        
         myArray.push(a);
-        var b = myArray.sort();
 
-        //mySearchArray.push(searchName);
-        //myCountArray.push(searchCount);
-        // console.log("Array " + mySearchArray);
-        //  console.log("Array " + b);
-        // var tests = SortMyArray();
-        console.log("inside")
-        console.log(myArray);//             array of searches
+        mySearchArray.push(searchName);
+        myCountArray.push(searchCount);
+
+        SortMyArray(myArray) ;
+
+
+        //console.log("inside")
+       // console.log(myArray);
     }); 
-    console.log("outside")  
-    console.log(myArray);
+    //console.log("outside")  
+   // console.log(myArray);
+      
+
 };
 
 $(document).on("click", "#addInput", function() {
@@ -385,6 +398,8 @@ $(document).on("click", "#addInput", function() {
     $('.video').empty();
     var whatIsTyped = $('#userInputText').val();
     checkValue(whatIsTyped);
+    checkSeachExists(whatIsTyped);
+    a2();
     WD(whatIsTyped);
     GetNews(whatIsTyped);
     GetConcertInfo(whatIsTyped);
@@ -395,15 +410,15 @@ $(document).on("click", "#addInput", function() {
     var whatIsTyped = $('#userInputText').val();
     //We pull the same variable defined above and run it as the "item" from the function album.
    album(whatIsTyped);
-
+    
     $("#userInputText").val('');
 
 });
 
 
 $( window ).load(function() {
-    a2();
-    console.log( "window loaded" );
-	console.log(myArray);
+   // a2();
+   // console.log( "window loaded" );
+	//console.log(myArray);
 
 });
