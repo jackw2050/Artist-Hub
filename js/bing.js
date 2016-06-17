@@ -6,6 +6,8 @@ var firebaseSearchsRoot = new Firebase("https://blistering-heat-4580.firebaseio.
 var mySearchArray = [];
 var myCountArray = [];
 var searchExists = false;
+var myArray = [];
+
 
 
 // Search array to verify if search for band/ artist already exists.
@@ -27,59 +29,53 @@ function checkSeachExists(name) {
     }
 }
 
-/*  Currently this does not order child node only parent
-//var scoresRef = new Firebase("https://dinosaur-facts.firebaseio.com/scores");
-firebaseSearchsRoot.orderByValue().limitToLast(5).on("value", function(snapshot) {
-  snapshot.forEach(function(data) {
-    console.log(snapshot.val())
-    console.log("The " + data.key() + " dinosaur's score is " + data.count.val());
-  });
-});
-*/
+
+function a2() {
+    firebaseSearchsRoot.on("child_added", function(childSnapshot) { // change to order by count
+        var searchName = childSnapshot.val().name;
+        var searchCount = childSnapshot.val().count;
+        //  console.log("searchCount " + searchCount);
+        //  console.log("search name " + searchName + "     searchCount " + searchCount);
+
+        var a = {
+            name: searchName,
+            count: searchCount
+        }
+
+        myArray.push(a);
+        var b = myArray.sort();
+
+        //mySearchArray.push(searchName);
+        //myCountArray.push(searchCount);
+        // console.log("Array " + mySearchArray);
+        //  console.log("Array " + b);
+        // var tests = SortMyArray();
+        console.log(myArray);//             array of searches
+    });
 
 
-
-var myArray = [];
-
-// Create snapshot of Firebase on load or new search    orderByValue()
-
-a2();
-
-function a2(){
-firebaseSearchsRoot.on("child_added", function(childSnapshot) {// change to order by count
-    // console.log(childSnapshot.val())
-    var searchName = childSnapshot.val().name;
-    var searchCount = childSnapshot.val().count;
-    //  console.log("searchCount " + searchCount);
-  //  console.log("search name " + searchName + "     searchCount " + searchCount);
-
-var a = {
-    name:searchName,
-    count:searchCount
+   
 }
 
-myArray.push(a);
-var b = myArray.sort();
 
-    mySearchArray.push(searchName);
-    myCountArray.push(searchCount);
-       console.log("Array " + mySearchArray);
-       console.log("Array " + b);
-      // SortMyArray();
-       console.log(myArray);
-});
+function UpdateTop5() {// array of objects  name:  ,
+console.log(myArray);
+    for (var x = 0; x < 5; x++) {
+        
+            //add code here
 
 
-//var c = SortMyArray();
-///console.log(c);
-//UpdateTop5();
+    }
+ 
 }
 
-function SortMyArray(){
-myArray.sort(function(a, b) {
-    return parseFloat(a.count) > parseFloat(b.count);
-});
 
+
+
+function SortMyArray() {
+    myArray.sort(function(a, b) {
+        return parseFloat(a.count) < parseFloat(b.count);
+    });
 }
 
 
@@ -105,10 +101,9 @@ function tryUpdateSearch(userId, userData) {
 // This code checks for existance of data name.  Creates new data or returns error if it exists.
 // Since this function is only called if the search item is not in the array it should never throw an exception
 function AddSearchItem(search, counter) {
-    //   var userId = prompt('Band?', 'Selena Gomez');
 
     let searchDataNew = {
-        name: search.toLowerCase(),// convert name to all lower case to prevent duplicates.  Does not work for mispelling
+        name: search.toLowerCase(), // convert name to all lower case to prevent duplicates.  Does not work for mispelling
         count: counter
     };
     tryCreateSearch(search.replace(/ /g, "_"), searchDataNew);
@@ -128,28 +123,20 @@ function tryCreateSearch(userId, userData) {
 //  Comment out alerts.  We should add some code here???
 function searchCreated(userId, success) {
     if (!success) {
-        alert('user ' + userId + ' already exists!');
+       // alert('user ' + userId + ' already exists!');
     } else {
-        alert('Successfully created ' + userId);
+       // alert('Successfully created ' + userId);
     }
 }
 
 
 
 
-function UpdateTop5() {
 
-///////////////////////////////
 
-// bandSelected = bandSelected.replace(/ /g, "+");
-//////////////////////////////////////////
-    
 
-    for (var x = 0; x < 5; x++) {
-    $("#list-5").append("<li id='" + x + "'>" + mySearchArray[x] + "</li>");//  This does not work
-    }
-   // $('#top2').html(mySearchArray[2]);// just checking
-}
+
+
 //-----------------------------------------   News Section --------------------------------------------------
 function GetNews(bandSelected) {
     console.log(bandSelected);

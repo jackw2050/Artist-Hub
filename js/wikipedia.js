@@ -1,3 +1,8 @@
+$(document).on("load", function() {
+    a2();
+    console.log(myArray);
+});
+
 
 
 function WD(item) {
@@ -11,13 +16,13 @@ function WD(item) {
 }
 // function checkValue(whatIsTyped)
 // {
-// 	re = ^.{2,}$;
-// 	if(whatIsTyped != '' && !whatIsTyped.match(re)) {
-// 		alert("You must enter a valid value");
-// 		$('#userInputText').focus();
-// 		return false;
-// 	}
-// 	return true;
+//  re = ^.{2,}$;
+//  if(whatIsTyped != '' && !whatIsTyped.match(re)) {
+//      alert("You must enter a valid value");
+//      $('#userInputText').focus();
+//      return false;
+//  }
+//  return true;
 // };
 $(document).on("click", "#addInput", function() {
     $('#wikipediaObject').html('');
@@ -30,5 +35,5 @@ $(document).on("click", "#addInput", function() {
     searchSongs(whatIsTyped);
     checkSeachExists(whatIsTyped);
     $("#userInputText").val('');
-    $('footer').append("<h1>Test</h1>");
+
 });
