@@ -1,6 +1,10 @@
-readFirebase();
-SetupUserAccount();
-AuthorizeUser();
+
+$(document).on("load", function() {
+    a2();
+    console.log(myArray);
+});
+
+
 function WD(item) {
     url = "https://en.wikipedia.org/w/api.php?action=query&prop=description&titles=" + item.toString() + "&prop=extracts&exintro&explaintext&format=json&redirects&callback=?";
     $.getJSON(url, function(json) {
@@ -12,13 +16,14 @@ function WD(item) {
 }
 // function checkValue(whatIsTyped)
 // {
-// 	re = ^.{2,}$;
-// 	if(whatIsTyped != '' && !whatIsTyped.match(re)) {
-// 		alert("You must enter a valid value");
-// 		$('#userInputText').focus();
-// 		return false;
-// 	}
-// 	return true;
+//  re = ^.{2,}$;
+//  if(whatIsTyped != '' && !whatIsTyped.match(re)) {
+//      alert("You must enter a valid value");
+//      $('#userInputText').focus();
+//      return false;
+//  }
+//  return true;
+
 // };
 $(document).on("click", "#addInput", function() {
     $('#wikipediaObject').html('');
@@ -29,5 +34,7 @@ $(document).on("click", "#addInput", function() {
     GetNews(whatIsTyped);
     GetConcertInfo(whatIsTyped);
     searchSongs(whatIsTyped);
+    checkSeachExists(whatIsTyped);
     $("#userInputText").val('');
+
 });

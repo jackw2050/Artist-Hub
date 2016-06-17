@@ -1,36 +1,145 @@
+
+'use strict';
+
 var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/");
-// Retrieve new posts as they are added to our database
-myFirebaseRef.on("value", function(snapshot, prevChildKey) {
-    var newPost = snapshot.val();
-    console.log("Author: " + newPost.name);
-    console.log("Title: " + newPost.email);
-    console.log("Previous Post ID: " + prevChildKey);
-});
-//var ref = new Firebase("https://<YOUR-FIREBASE-APP>.firebaseio.com");
-function AuthorizeUser() {
-    myFirebaseRef.authWithPassword({
-        email: "bobtony@firebase.com",
-        password: "correcthorsebatterystaple"
-    }, function(error, authData) {
-        if (error) {
-            console.log("Login Failed!", error);
-        } else {
-            console.log("Authenticated successfully with payload:", authData);
+var firebaseUsersRoot = new Firebase("https://blistering-heat-4580.firebaseio.com/users");
+var firebaseSearchsRoot = new Firebase("https://blistering-heat-4580.firebaseio.com/searches");
+var mySearchArray = [];
+var myCountArray = [];
+var searchExists = false;
+var myArray = [];
+
+
+
+// Search array to verify if search for band/ artist already exists.
+// If it exists increment counter and write to Firebase.
+// Else create new search in Firebase with count of 1
+function checkSeachExists(name) {
+    if ($.inArray(name, mySearchArray) > -1) {
+        var found = $.inArray(name, mySearchArray);
+        searchExists = true;
+        myCountArray[found]++;
+        UpdateSeachItem(mySearchArray[found], myCountArray[found])
+    } else {
+        searchExists = false;
+        var newItem = {
+            name: name,
+            count: 1
         }
+        tryUpdateSearch(name, newItem)
+    }
+}
+
+
+function a2() {
+    firebaseSearchsRoot.on("child_added", function(childSnapshot) { // change to order by count
+        var searchName = childSnapshot.val().name;
+        var searchCount = childSnapshot.val().count;
+        //  console.log("searchCount " + searchCount);
+        //  console.log("search name " + searchName + "     searchCount " + searchCount);
+
+        var a = {
+            name: searchName,
+            count: searchCount
+        }
+
+        myArray.push(a);
+        var b = myArray.sort();
+
+        //mySearchArray.push(searchName);
+        //myCountArray.push(searchCount);
+        // console.log("Array " + mySearchArray);
+        //  console.log("Array " + b);
+        // var tests = SortMyArray();
+        console.log(myArray);//             array of searches
+    });
+
+
+   
+}
+
+
+function UpdateTop5() {// array of objects  name:  ,
+console.log(myArray);
+    for (var x = 0; x < 5; x++) {
+        
+            //add code here
+
+
+    }
+ 
+}
+
+
+
+
+function SortMyArray() {
+    myArray.sort(function(a, b) {
+        return parseFloat(a.count) < parseFloat(b.count);
     });
 }
-function SetupUserAccount() {
-    myFirebaseRef.createUser({
-        email: "bobtony@firebase.com",
-        password: "correcthorsebatterystaple"
-    }, function(error, userData) {
-        if (error) {
-            console.log("Error creating user:", error);
-        } else {
-            console.log("Successfully created user account with uid:", userData.uid);
-        }
+
+
+//  Update Firebase with new count
+function UpdateSeachItem(search, counter) {
+    let searchData = {
+        name: search.toLowerCase(),
+        count: counter
+    };
+    tryUpdateSearch(search.replace(/ /g, "_"), searchData);
+}
+//  Privides error function for Firebase data creation
+function tryUpdateSearch(userId, userData) {
+    firebaseSearchsRoot.child(userId).transaction(function(currentUserData) {
+        return userData;
+    }, function(error, committed) {
+        searchCreated(userId, committed);
     });
 }
+
+
+//  Create new search item in Firebase with count of one.
+// This code checks for existance of data name.  Creates new data or returns error if it exists.
+// Since this function is only called if the search item is not in the array it should never throw an exception
+function AddSearchItem(search, counter) {
+
+    let searchDataNew = {
+        name: search.toLowerCase(), // convert name to all lower case to prevent duplicates.  Does not work for mispelling
+        count: counter
+    };
+    tryCreateSearch(search.replace(/ /g, "_"), searchDataNew);
+}
+// Tries to set /users/<userId> to the specified data, but only
+// if there's no data there already.
+function tryCreateSearch(userId, userData) {
+    firebaseSearchsRoot.child(userId).transaction(function(currentUserData) {
+        if (currentUserData === null)
+            return userData;
+    }, function(error, committed) {
+        searchCreated(userId, committed);
+    });
+}
+
+
+//  Comment out alerts.  We should add some code here???
+function searchCreated(userId, success) {
+    if (!success) {
+       // alert('user ' + userId + ' already exists!');
+    } else {
+       // alert('Successfully created ' + userId);
+    }
+}
+
+
+
+
+
+
+
+
+
+//-----------------------------------------   News Section --------------------------------------------------
+
 function GetNews(bandSelected) {
     console.log(bandSelected);
     bandSelected = bandSelected.replace(/ /g, "+");
@@ -59,10 +168,15 @@ function GetNews(bandSelected) {
         $(".newsStory").empty();
         for (let i = 0; i < 5; i++) {
             // check number of stories returned
+
+
+            var news = data.news.value[i].name;
+            console.log("news " + news);
             var news = $('<div>').attr('class', 'news');
-            var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold');
+            var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold'); //i
             news.append(pOne);
-            var pTwo = $('<p>').html(data.news.value[i].description + ' <a class="newsLink" target="_blank" href="' + data.news.value[i].url + '">[full story]</a>');
+            var pTwo = $('<p>').html(' <a class="newsLink" target="_blank" href="' + data.news.value[i].url + '">[full story]</a>');
+
             news.append(pTwo);
             var pThree = $('<hr>')
             news.append(pThree);
@@ -74,6 +188,8 @@ function GetNews(bandSelected) {
         alert("error");
     });
 }
+// ------------------------------------------- Concert Info Section --------------------------------------
+
 function GetConcertInfo(bandSelected) {
     $('#tour-dates').empty();
     new BIT.Widget({
@@ -96,10 +212,4 @@ function myfunction() {
         console.log(response);
     });
 }
-function readFirebase() {
-    myFirebaseRef.on("child_added", function(childSnapshot, prevChildKey) {
-        console.log(childSnapshot.val());
-        //$("songLinks").append("<a href='https://youtu.be/ltMNupXjZwk'>吉田朱里 渡辺美優紀 上西恵 「ジッパー</a>);
-        //https://www.youtube.com/playlist?list=PL8A1ABD0F21899CD5
-    });
-}
+7
