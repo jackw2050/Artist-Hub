@@ -56,7 +56,8 @@ function updateTop5() { // array of objects  name:  ,
         $('#top'+y).html('<a style="text-transform:none">  ' + newName + '</a>').attr('data-name', newName).on('click', searchAgain).css({
                     'margin-top': '10px',
                     'margin-bottom': '1px',
-                    'cursor': 'pointer'
+                    'cursor': 'pointer',
+                    'font-size': '14px'
                 });
     };
 };
