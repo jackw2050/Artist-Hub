@@ -381,7 +381,7 @@ $(document).on("click", "#addInput", function() {
     console.log("document on click");
     $('#wikipediaObject').html('');
     $('.video').empty();
-    var whatIsTyped = $('#userInputText').val();
+    var whatIsTyped = $('#userInputText').val().trim();
     checkValue(whatIsTyped);
     checkIfSearchExists(whatIsTyped);
     a2();
