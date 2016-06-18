@@ -39,9 +39,10 @@ function a2() {
 
 function sortMyArray() {
     console.log("sortMyArray");
-    myArray.sort(function(a, b) {
-        return parseFloat(a.count) < parseFloat(b.count);
+    myArray.sort(function(b, a) {
+        return parseFloat(a.count) - parseFloat(b.count);
     });
+   
 };
 
 function updateTop5() { // array of objects  name:  ,
