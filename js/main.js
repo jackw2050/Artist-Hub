@@ -175,7 +175,7 @@ function getNews(bandSelected) {
             var news = $('<div>').attr('class', 'news');
             var pOne = $('<p>').text(newsData.news.value[i].name).css('font-weight', 'bold'); //i
             news.append(pOne);
-            var pTwo = $('<p>').html(' <a class="newsLink" target="_blank" href="' + newsData.news.value[i].url + '">[full story]</a>');
+            var pTwo = $('<p>').html(newsData.news.value[i].description + ' ...<a class="newsLink" target="_blank" href="' + newsData.news.value[i].url + '">[full story]</a>');
 
             news.append(pTwo);
             var pThree = $('<hr>')
