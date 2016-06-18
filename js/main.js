@@ -93,8 +93,10 @@ function searchSongs(keyword) {
                 playlistIdArray.push(playlistId);
                 //var pThree = $('<p>').text("PlaylistId: " + playlistId).css({'margin':'1px','background-color':'yellow', 'width':'400px'});
                 //videoDiv.append(pThree);
+
             };
             $('.songLinks').append(videoDiv).addClass('mCustomScrollbar').attr('data-mcs-theme', 'dark');
+
             //console.log(videoArray);
             allVideoArray.push(videoArray);
         });
@@ -123,7 +125,9 @@ function onClick() {
 // Else create new search in Firebase with count of 1
 function checkSeachExists(name) {
     let tempName = name.toLowerCase();
-    tempName.replace(/-/g, "_");
+
+        tempName.replace(/-/g, "_");
+
 
     if ($.inArray(name, mySearchArray) > -1) {
         var found = $.inArray(name, mySearchArray);
@@ -145,11 +149,13 @@ function checkSeachExists(name) {
 
 
 
+
 function UpdateTop5() { // array of objects  name:  ,
     console.log(myArray);
     for (var x = 0; x < 5; x++) {
 
         //add code here
+
     };
 };
 
@@ -209,7 +215,9 @@ function tryCreateSearch(userId, userData) {
 
 function searchCreated(userId, success) {
     if (!success) {
+
         // alert('user ' + userId + ' already exists!');
+
     } else {
         //alert('Successfully created ' + userId);
     };
@@ -227,6 +235,7 @@ function WD(item) {
 
 function checkValue(whatIsTyped) {
     console.log("inside = " + whatIsTyped);
+
     var re = /^.{2,}$/;
     console.log("re");
     if (whatIsTyped != '' && !whatIsTyped.match(re)) {
@@ -237,6 +246,7 @@ function checkValue(whatIsTyped) {
         return false;
     };
     return true;
+
 };
 
 
@@ -363,12 +373,12 @@ function myfunction() {
 };
 //"child_added"
 function a2() {
+
     let ii = 0;
     firebaseSearchsRoot.on("child_added", function(childSnapshot) { // change to order by count
         ii++;
-
-
         firebaseObjectArray.push(childSnapshot.val());
+
         var searchName = childSnapshot.val().name;
         var searchCount = childSnapshot.val().count;
         //  console.log("searchCount " + searchCount);
@@ -383,6 +393,7 @@ function a2() {
 
         mySearchArray.push(searchName);
         myCountArray.push(searchCount);
+
 
         SortMyArray(myArray);
         //console.log(myArray);
@@ -399,6 +410,7 @@ function a2() {
     // console.log(myArray);
 
 
+
 };
 
 $(document).on("click", "#addInput", function() {
@@ -413,15 +425,18 @@ $(document).on("click", "#addInput", function() {
     GetConcertInfo(whatIsTyped);
     searchSongs(whatIsTyped);
 
+
     $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
     //This grabs the html value from userInputText and stores it in a variable.
     var whatIsTyped = $('#userInputText').val();
     //We pull the same variable defined above and run it as the "item" from the function album.
     album(whatIsTyped);
 
+
     $("#userInputText").val('');
 
 });
+
 
 
 $(window).load(function() {
@@ -430,3 +445,4 @@ $(window).load(function() {
     //console.log(myArray);
 
 });
+
