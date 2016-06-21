@@ -2,7 +2,7 @@
     font-family: 'Orbitron', sans-serif;
 }
 
-body {
+main {
     /*background-color: #90a4ae;*/
     color: white;
 }
@@ -52,7 +52,8 @@ body {
 }
 
 .card {
-    max-height: 400px;
+    max-height: 447px;
+    padding:2px;
     /*overflow: auto; */
 }
 
@@ -73,13 +74,16 @@ body {
 }
 
 .card-action {
-    max-height: 300px;
+    max-height: 170px;
     overflow: auto;
+    padding:2px;
 }
 
 footer {
     margin-left: auto;
     margin-right: auto;
+    background-color: #e65100;
+
 }
 
 #list-5{
@@ -90,7 +94,20 @@ footer {
     color: black;
 }
 
+ body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: #e65100;
+  }
 
+  main {
+    flex: 1 0 auto;
+  }
+#jack{
+    padding:0px;
+    margin:0px;
+}
 /*
 	font-family: 'Orbitron', sans-serif;
 	font-family: 'Rock Salt', cursive;

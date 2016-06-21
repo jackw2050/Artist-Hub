@@ -9,17 +9,206 @@ var playlistIdArray = [];
 var myFirebaseRef = new Firebase("https://blistering-heat-4580.firebaseio.com/");
 var firebaseUsersRoot = new Firebase("https://blistering-heat-4580.firebaseio.com/users");
 var firebaseSearchsRoot = new Firebase("https://blistering-heat-4580.firebaseio.com/searches");
+var dbLocation = 'https://blistering-heat-4580.firebaseio.com/';
 var mySearchArray = [];
 var myCountArray = [];
 var searchExists = false;
 var myArray = [];
 var firebaseObjectArray = [];
 
+function a2() {
+    console.log("a2");
+    myArray = [];
+    let ii = 0;
+    firebaseSearchsRoot.on("child_added", function(childSnapshot) { // change to order by count
+        ii++;
+        firebaseObjectArray.push(childSnapshot.val());
+        var searchName = childSnapshot.val().name;
+        var searchCount = childSnapshot.val().count;
+        var a = {
+            name: searchName,
+            count: searchCount
+        };
+        myArray.push(a);
+        mySearchArray.push(searchName);
+        myCountArray.push(searchCount);
+    });;
+    setTimeout(sortMyArray, 3000);
+    setTimeout(updateTop5, 3100);
+};
+
+function sortMyArray() {
+    console.log("sortMyArray");
+    myArray.sort(function(b, a) {
+        return parseFloat(a.count) - parseFloat(b.count);
+    });
+   
+};
+
+function updateTop5() { // array of objects  name:  ,
+     console.log("updateTop5");
+     // console.log(myArray);
+
+    for (var x = 0; x < 5; x++) {
+        var y = x+1;
+        // console.log(y);
+        var newName = toTitleCase(myArray[x].name);
+        // console.log(newName);
+        $('#top'+y).html('<a style="text-transform:none">  ' + newName + '</a>').attr('data-name', newName).on('click', searchAgain).css({
+                    'margin-top': '10px',
+                    'margin-bottom': '1px',
+                    'cursor': 'pointer',
+                    'font-size': '14px'
+                });
+    };
+};
+
+function toTitleCase(str) {
+    console.log("toTitleCase");
+        str = str.replace(/_/g, " ");
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
+
+function checkValue(whatIsTyped) {
+    console.log("checkValue");
+    // console.log("inside = " + whatIsTyped);
+
+    var re = /^.{2,}$/;
+    // console.log("re");
+    if (whatIsTyped != '' && !whatIsTyped.match(re)) {
+        // console.log("this is below the regex");
+        sweetAlert("Nope...", "You need to enter an artist!", "error");
+        $('#rightColumn').html("");
+        whatIsTyped.focus();
+        return false;
+    };
+    return true;
+};
+
+function checkIfSearchExists(search) {
+    console.log("checkIfSearchExists");
+// The ideantifier in the collection.
+    var searchTerm = search.toLowerCase().replace(/ /g, "_");
+    var camelCaseTerm = toTitleCase(search);
+    // console.log("Search Term: " + searchTerm);
+    // console.log("Camel case term: " + camelCaseTerm);
+// the data for the object being created/updated.
+    var searchSet = {
+        name: camelCaseTerm,
+        count: 1
+    };
+// attempt to get the child in the collection by uid.
+    firebaseSearchsRoot.child(searchTerm).once('value', function(snapshot) {
+        // console.log(snapshot);
+        // console.log(snapshot.val());
+        // if data exists
+        if (snapshot.exists()) {
+            var firebaseSearchTerm = new Firebase("https://blistering-heat-4580.firebaseio.com/searches/" + searchTerm);
+            // get the ref (in this case /users/2) and update its contents
+            firebaseSearchTerm.child('count').once('value', function(howMany) {
+                // console.log(howMany);
+                // console.log(howMany.val());
+                var searchCount = howMany.val();
+                searchCount = searchCount + 1;
+                // console.log("search count: " + searchCount);
+                var updateCount = {
+                    count: searchCount
+                };
+                snapshot.ref().update(updateCount);
+            });
+        } else {
+            tryUpdateSearch(searchTerm, searchSet);
+        };
+    });
+};
+
+//  Privides error function for Firebase data creation
+function tryUpdateSearch(searchTerm, userData) {
+    console.log("tryUpdateSearch");
+    firebaseSearchsRoot.child(searchTerm).transaction(function(currentUserData) {
+        return userData;
+    }, function(error, committed) {
+      //  searchCreated(userId, committed);
+    });
+};
+
+function WD(item) {
+    console.log("WD");
+    item = item.replace(/ /g, "+");
+    var url = "https://en.wikipedia.org/w/api.php?action=query&prop=description&titles=" + item.toString() + "&prop=extracts&exintro&explaintext&format=json&redirects&callback=?";
+    $.getJSON(url, function(json) {
+        var item_id = Object.keys(json.query.pages)[0];
+        var userGiven = json.query.pages[item_id].extract;
+        var result = "<b></b> <t>" + item + "</t> <b> : </b>" + userGiven;
+        $('#wikipediaObject').append("<div class='wikipediaText'>" + userGiven + "</div>");
+    });
+};
+
+function getNews(bandSelected) {
+    console.log("getNews");
+    // console.log(bandSelected);
+    bandSelected = bandSelected.replace(/ /g, "+");
+    bandSelected = bandSelected.replace(/-/g, "+");
+    var params = {
+        // Request parameters
+        "q": bandSelected,
+        "count": "10",
+        "offset": "0",
+        "mkt": "en-us",
+        "&Options": "EnableHighlighting",
+        "&News.Offset": "0",
+        "safesearch": "Moderate",
+    };
+    $.ajax({
+        url: "https://bingapis.azure-api.net/api/v5/search/?" + $.param(params),
+        beforeSend: function(xhrObj) {
+            // Request headers
+            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9dd9941d21e24c4d921bf0532dced130");
+        },
+        type: "GET",
+        // Request body
+        data: "{body}",
+    }).done(function(newsData) {
+        $(".newsStory").empty();
+        for (let i = 0; i < 5; i++) {
+            var news = newsData.news.value[i].name;
+            // console.log("news " + news);
+            var news = $('<div>').attr('class', 'news');
+            var pOne = $('<p>').text(newsData.news.value[i].name).css('font-weight', 'bold'); //i
+            news.append(pOne);
+            var pTwo = $('<p>').html(newsData.news.value[i].description + ' <a class="newsLink" target="_blank" href="' + newsData.news.value[i].url + '">[full story]</a>');
+
+            news.append(pTwo);
+            var pThree = $('<hr>')
+            news.append(pThree);
+            $('.newsStory').append(news);
+        };
+    }).fail(function() {
+        sweetAlert("Nope...", "You need to enter an artist!", "error");
+        $('#rightColumn').html("");
+    });
+};
+
+function getConcertInfo(bandSelected) {
+    console.log("getConcertInfo");
+    $('#tour-dates').empty();
+    new BIT.Widget({
+        "artist": bandSelected,
+        "div_id": "tour-dates",
+        "force_narrow_layout": "true",
+        "display_limit": "5",
+        "text_color": "#616161",
+        "bg_color": "#00171F",
+        "width": "275px",
+        "notify_me": "true"
+    }).insert_events();
+};
 
 function searchSongs(keyword) {
+    console.log("searchSongs");
     $('.songLinks').empty();
     keyword = keyword.replace(/ /g, "+");
-    console.log(keyword);
+    // console.log(keyword);
     var queryURL = 'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=' + keyword + '&key=' + ytAPIKey;
     // Creates AJAX call for the specific movie being 
     $.ajax({
@@ -27,9 +216,9 @@ function searchSongs(keyword) {
         method: 'GET'
     }).done(function(response) {
         var results = response.items;
-        console.log(queryURL);
-        console.log(response);
-        console.log(results);
+        // console.log(queryURL);
+        // console.log(response);
+        // console.log(results);
         Object.keys(results).forEach(function(key, index) {
             videoArray = [];
             var num = parseInt(key) + 1;
@@ -113,150 +302,14 @@ function searchSongs(keyword) {
     });
 };
 
-function onClick() {
-    $('.video').empty();
-    var vidId = $(this).attr('id');
-    $('.video').html('<iframe width="395" height="315" src="https://www.youtube-nocookie.com/embed/' + vidId + '?rel=0&"&amp;controls=0&autoplay=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>');
-};
-
-
-// Search array to verify if search for band/ artist already exists.
-// If it exists increment counter and write to Firebase.
-// Else create new search in Firebase with count of 1
-function checkSeachExists(name) {
-    let tempName = name.toLowerCase();
-
-        tempName.replace(/-/g, "_");
-
-
-    if ($.inArray(name, mySearchArray) > -1) {
-        var found = $.inArray(name, mySearchArray);
-        searchExists = true;
-        myCountArray[found]++;
-        UpdateSeachItem(mySearchArray[found], myCountArray[found])
-    } else {
-        searchExists = false;
-        var newItem = {
-            name: name,
-            count: 1
-        };
-        tryUpdateSearch(name, newItem)
-    };
-};
-
-
-
-
-
-
-
-function UpdateTop5() { // array of objects  name:  ,
-    console.log(myArray);
-    for (var x = 0; x < 5; x++) {
-
-        //add code here
-
-    };
-};
-
-
-function SortMyArray() {
-    myArray.sort(function(a, b) {
-        return parseFloat(a.count) < parseFloat(b.count);
-    });
-};
-
-
-
-
-
-//  Update Firebase with new count
-function UpdateSeachItem(search, counter) {
-    let searchData = {
-        name: search.toLowerCase(),
-        count: counter
-    };
-    tryUpdateSearch(search.replace(/ /g, "_"), searchData);
-};
-
-//  Privides error function for Firebase data creation
-function tryUpdateSearch(userId, userData) {
-    firebaseSearchsRoot.child(userId).transaction(function(currentUserData) {
-        return userData;
-    }, function(error, committed) {
-        searchCreated(userId, committed);
-    });
-};
-
-
-//  Create new search item in Firebase with count of one.
-// This code checks for existance of data name.  Creates new data or returns error if it exists.
-// Since this function is only called if the search item is not in the array it should never throw an exception
-function AddSearchItem(search, counter) {
-
-    let searchDataNew = {
-        name: search.toLowerCase(), // convert name to all lower case to prevent duplicates.  Does not work for mispelling
-        count: counter
-    };
-    tryCreateSearch(search.replace(/ /g, "_"), searchDataNew);
-};
-
-// Tries to set /users/<userId> to the specified data, but only
-// if there's no data there already.
-function tryCreateSearch(userId, userData) {
-    firebaseSearchsRoot.child(userId).transaction(function(currentUserData) {
-        if (currentUserData === null)
-            return userData;
-    }, function(error, committed) {
-        searchCreated(userId, committed);
-    });
-};
-
-
-function searchCreated(userId, success) {
-    if (!success) {
-
-        // alert('user ' + userId + ' already exists!');
-
-    } else {
-        //alert('Successfully created ' + userId);
-    };
-};
-
-function WD(item) {
-    var url = "https://en.wikipedia.org/w/api.php?action=query&prop=description&titles=" + item.toString() + "&prop=extracts&exintro&explaintext&format=json&redirects&callback=?";
-    $.getJSON(url, function(json) {
-        var item_id = Object.keys(json.query.pages)[0];
-        var userGiven = json.query.pages[item_id].extract;
-        var result = "<b></b> <t>" + item + "</t> <b> : </b>" + userGiven;
-        $('#wikipediaObject').append("<div class='wikipediaText'>" + userGiven + "</div>");
-    });
-};
-
-function checkValue(whatIsTyped) {
-    console.log("inside = " + whatIsTyped);
-
-    var re = /^.{2,}$/;
-    console.log("re");
-    if (whatIsTyped != '' && !whatIsTyped.match(re)) {
-        console.log("this is below the regex");
-        sweetAlert("Nope...", "You need to enter an artist!", "error");
-        $('#rightColumn').html("");
-        whatIsTyped.focus();
-        return false;
-    };
-    return true;
-
-};
-
-
 function album(item) {
+    console.log("album");
     //using Spotify API to grab the artist we want information from. 
     var url = "https://api.spotify.com/v1/search?q=" + item.toString() + "&type=artist";
     $.getJSON(url, function(json) {
-        console.log(json.artists);
+        // console.log(json.artists);
         var lengthOfArtists = json.artists.total;
-        console.log(lengthOfArtists + "This is the total amount of artists");
+        // console.log(lengthOfArtists + "This is the total amount of artists");
         if (lengthOfArtists > 1) {
             //Grab the second item in the images array which is a smaller image
             var albumImages = json.artists.items[0].images[0].url;
@@ -275,7 +328,7 @@ function album(item) {
             });
             $('#rightColumn').html("");
         };
-        console.log(artistPopularity);
+        // console.log(artistPopularity);
         //$('rightColumn').prepend("Hotness rating: " + artistPopularity);
         //This feature will make it so that the popularity of the arist determines
         //the color of the glow around their album art. Red is HOT, yellow is in the right, and blue is ice COLD.
@@ -293,156 +346,115 @@ function album(item) {
     });
 };
 
+// function searchCreated(userId, success) {
+//     console.log("searchCreated");
+//     if (!success) {
+//         // alert('user ' + userId + ' already exists!');
+//     } else {
+//         //alert('Successfully created ' + userId);
+//     };
+// };
 
-//-----------------------------------------   News Section --------------------------------------------------
-
-function GetNews(bandSelected) {
-    console.log(bandSelected);
-    bandSelected = bandSelected.replace(/ /g, "+");
-    bandSelected = bandSelected.replace(/-/g, "+");
-    var params = {
-        // Request parameters
-        "q": bandSelected,
-        "count": "10",
-        "offset": "0",
-        "mkt": "en-us",
-        "&Options": "EnableHighlighting",
-        "&News.Offset": "0",
-        "safesearch": "Moderate",
-    };
-    $.ajax({
-        url: "https://bingapis.azure-api.net/api/v5/search/?" + $.param(params),
-        beforeSend: function(xhrObj) {
-            // Request headers
-            xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "9dd9941d21e24c4d921bf0532dced130");
-        },
-        type: "GET",
-        // Request body
-        data: "{body}",
-    }).done(function(data) {
-        console.log(data);
-        $(".newsStory").empty();
-        for (let i = 0; i < 5; i++) {
-            // check number of stories returned
-
-
-            var news = data.news.value[i].name;
-            console.log("news " + news);
-            var news = $('<div>').attr('class', 'news');
-            var pOne = $('<p>').text(data.news.value[i].name).css('font-weight', 'bold'); //i
-            news.append(pOne);
-            var pTwo = $('<p>').html(' <a class="newsLink" target="_blank" href="' + data.news.value[i].url + '">[full story]</a>');
-
-            news.append(pTwo);
-            var pThree = $('<hr>')
-            news.append(pThree);
-            $('.newsStory').append(news);
-        };
-        //console.log(data);
-        // alert("success");
-    }).fail(function() {
-        sweetAlert("Nope...", "You need to enter an artist!", "error");
-        $('#rightColumn').html("");
-    });
+function onClick() {
+    console.log("onClick");
+    $('.video').empty();
+    var vidId = $(this).attr('id');
+    $('.video').html('<iframe width="395" height="315" src="https://www.youtube-nocookie.com/embed/' + vidId + '?rel=0&"&amp;controls=0&autoplay=1&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>');
 };
 
-// ------------------------------------------- Concert Info Section --------------------------------------
-
-function GetConcertInfo(bandSelected) {
-    $('#tour-dates').empty();
-    new BIT.Widget({
-        "artist": bandSelected,
-        "div_id": "tour-dates",
-        "force_narrow_layout": "true",
-        "display_limit": "5",
-        "text_color": "#616161",
-        "bg_color": "#00171F",
-        "width": "300px",
-        "notify_me": "true"
-    }).insert_events();
-};
-
-function myfunction() {
-    var queryURL = "https://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
-    $.ajax({
-        url: queryURL,
-        method: 'GET'
-    }).done(function(response) {
-        console.log(response);
-    });
-};
-//"child_added"
-function a2() {
-
-    let ii = 0;
-    firebaseSearchsRoot.on("child_added", function(childSnapshot) { // change to order by count
-        ii++;
-        firebaseObjectArray.push(childSnapshot.val());
-
-        var searchName = childSnapshot.val().name;
-        var searchCount = childSnapshot.val().count;
-        //  console.log("searchCount " + searchCount);
-        //  console.log("search name " + searchName + "     searchCount " + searchCount);
-
-        var a = {
-            name: searchName,
-            count: searchCount
-        };
-
-        myArray.push(a);
-
-        mySearchArray.push(searchName);
-        myCountArray.push(searchCount);
-
-
-        SortMyArray(myArray);
-        //console.log(myArray);
-        if (ii = Object.keys(firebaseObjectArray).length) {
-            console.log("Done");
-            console.log(myArray);
-            UpdateTop5();
-        }
-
-        //console.log("inside")
-        // console.log(myArray);
-    });
-    //console.log("outside")  
-    // console.log(myArray);
-
-
-
+function searchAgain() {
+    console.log("searchAgain");
+    var nameID = $(this).attr('data-name');
+    console.log(nameID);
+    $('#wikipediaObject').html('');
+    $('.video').empty();
+    checkIfSearchExists(nameID);
+    a2();
+    WD(nameID);
+    getNews(nameID);
+    getConcertInfo(nameID);
+    searchSongs(nameID);
+    $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
+    album(nameID);
 };
 
 $(document).on("click", "#addInput", function() {
+    console.log("document on click");
     $('#wikipediaObject').html('');
     $('.video').empty();
-    var whatIsTyped = $('#userInputText').val();
+    var whatIsTyped = $('#userInputText').val().trim();
     checkValue(whatIsTyped);
-    checkSeachExists(whatIsTyped);
+    checkIfSearchExists(whatIsTyped);
     a2();
     WD(whatIsTyped);
-    GetNews(whatIsTyped);
-    GetConcertInfo(whatIsTyped);
+    getNews(whatIsTyped);
+    getConcertInfo(whatIsTyped);
     searchSongs(whatIsTyped);
-
-
     $('#rightColumn').html("<div class='preloader-wrapper big active'><div class='spinner-layer spinner-blue-only'><div class='circle-clipper left'><div class='circle'></div></div><div class='gap-patch'><div class='circle'></div></div><div class='circle-clipper right'><div class='circle'></div></div></div></div>");
-    //This grabs the html value from userInputText and stores it in a variable.
-    var whatIsTyped = $('#userInputText').val();
-    //We pull the same variable defined above and run it as the "item" from the function album.
     album(whatIsTyped);
-
-
     $("#userInputText").val('');
-
 });
 
 
 
-$(window).load(function() {
-    // a2();
-    // console.log( "window loaded" );
-    //console.log(myArray);
+// $(window).load(function() {
+//     console.log("window on load");
+//     // console.log( "window loaded" );
+//     // console.log(myArray);
 
-});
+// });
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// ++++++++++++++++   THE FUNCTIONS BELOW HERE ARE NEVER CALLED  ???  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// 
+// 
+//  Create new search item in Firebase with count of one.
+// This code checks for existance of data name.  Creates new data or returns error if it exists.
+// Since this function is only called if the search item is not in the array it should never throw an exception
+// function addSearchItem(search, counter) {
+//     // console.log("addSearchItem");
+//     var searchTerm = search.toLowerCase().replace(/ /g, "_");
+//     let searchDataNew = {
+//         name: searchTerm, // convert name to all lower case to prevent duplicates.  Does not work for mispelling
+//         count: counter
+//     };
+//     tryCreateSearch(searchTerm, searchDataNew);
+// };
+
+// // Tries to set /users/<userId> to the specified data, but only
+// // if there's no data there already.
+function tryCreateSearch(userId, userData) {
+    // console.log("tryCreateSearch");
+    firebaseSearchsRoot.child(userId).transaction(function(currentUserData) {
+        if (currentUserData === null)
+            return userData;
+    }, function(error, committed) {
+       // searchCreated(userId, committed);
+    });
+};
+
+// function myFunction() {
+//     // console.log("myFunction");
+//     var queryURL = "https://api.bandsintown.com/artists/" + artist + ".json?app_id=YOUR_APP_ID&api_version=2.0&callback=showArtist";
+//     $.ajax({
+//         url: queryURL,
+//         method: 'GET'
+//     }).done(function(response) {
+//         // console.log(response);
+//     });
+// };
+// //"child_added"
+// //
+// // //  Update Firebase with new count
+// function updateSeachItem(search, counter) {
+//     // console.log("updateSeachItem");
+//     var camelCaseTerm = toTitleCase(search);
+//     var searchTerm = search.toLowerCase().replace(/ /g, "_");
+//     let searchData = {
+//         name: camelCaseTerm,
+//         count: counter
+//     };
+//     tryUpdateSearch(searchTerm, searchData);
+// };
 
